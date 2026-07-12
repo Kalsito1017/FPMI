@@ -26,7 +26,7 @@ export class ContactService {
   async create(dto: CreateContactMessageDto, userId?: number) {
     return this.prisma.contactMessage.create({
       data: {
-        type: dto.type as any,
+        type: dto.type,
         subject: dto.subject,
         message: dto.message,
         userId: userId ?? null,

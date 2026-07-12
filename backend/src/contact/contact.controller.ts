@@ -14,7 +14,6 @@ import { Role } from '@prisma/client';
 import type { Request } from 'express';
 import { ContactService } from './contact.service';
 import { CreateContactMessageDto } from './dto/create-contact-message.dto';
-import { Public } from '../common/public.decorator';
 import { Roles } from '../common/roles.decorator';
 
 @Controller('contact')
@@ -35,7 +34,7 @@ export class ContactController {
 
   @Post()
   create(@Body() dto: CreateContactMessageDto, @Req() req: Request) {
-    const userId = (req as any).user?.id ?? undefined;
+    const userId = (req as { user?: { id: number } }).user?.id;
     return this.contactService.create(dto, userId);
   }
 

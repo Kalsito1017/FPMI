@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -50,7 +50,7 @@ export class AuthService {
       throw new BadRequestException('CAPTCHA verification failed');
     }
 
-    const role = (dto.role as any) ?? 'GUEST';
+    const role = (dto.role as Role) ?? Role.GUEST;
     if (role === 'STUDENT' && !dto.specialty) {
       throw new BadRequestException('Specialty is required for students');
     }
@@ -172,14 +172,13 @@ export class AuthService {
   }
 
   async updateProfile(userId: number, dto: UpdateProfileDto) {
-    const data: any = {};
-    if (dto.name !== undefined) data.name = dto.name;
-    if (dto.specialty !== undefined) data.specialty = dto.specialty;
-    if (dto.hobbies !== undefined) data.hobbies = dto.hobbies;
-
     const user = await this.prisma.user.update({
       where: { id: userId },
-      data,
+      data: {
+        ...(dto.name !== undefined && { name: dto.name }),
+        ...(dto.specialty !== undefined && { specialty: dto.specialty }),
+        ...(dto.hobbies !== undefined && { hobbies: dto.hobbies }),
+      },
     });
     return { user: toSafeUser(user) };
   }
@@ -198,6 +197,7 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
     const { passwordHash, ...safe } = user;
+    void passwordHash;
     return { user: safe };
   }
 
