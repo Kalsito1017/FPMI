@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Patch, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
+import type { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { Public } from '../common/public.decorator';
@@ -10,20 +20,43 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: 'lax' as const,
+  secure: process.env.NODE_ENV === 'production',
+  path: '/',
+};
+
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
   @Post('register')
-  register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto);
+  async register(
+    @Body() dto: RegisterDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.register(dto);
+    res.cookie('token', result.token, COOKIE_OPTIONS);
+    return { user: result.user, token: result.token };
   }
 
   @Public()
   @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.login(dto);
+    res.cookie('token', result.token, COOKIE_OPTIONS);
+    return { user: result.user, token: result.token };
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token', { path: '/' });
+    return { message: 'Logged out' };
   }
 
   @Get('me')
@@ -57,5 +90,15 @@ export class AuthController {
     @Body() dto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(req.user.id, dto);
+  }
+
+  @Get('export-data')
+  exportData(@Req() req: Request & { user: User }) {
+    return this.authService.exportData(req.user.id);
+  }
+
+  @Delete('account')
+  deleteAccount(@Req() req: Request & { user: User }) {
+    return this.authService.deleteAccount(req.user.id);
   }
 }

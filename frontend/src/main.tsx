@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
 import { App } from '@/App'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { AuthInit } from '@/components/AuthInit'
 import { initTheme } from '@/store/theme-store'
 import { initLang } from '@/store/lang-store'
 import './i18n/config'
@@ -25,7 +26,9 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary><App /></ErrorBoundary>
+      <ErrorBoundary>
+        <AuthInit><App /></AuthInit>
+      </ErrorBoundary>
       <Toaster />
     </QueryClientProvider>
   </StrictMode>,

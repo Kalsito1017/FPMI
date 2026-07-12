@@ -22,6 +22,8 @@ model User {
   passwordHash String
   role         Role     @default(GUEST)
   avatar       String?
+  specialty    String?
+  hobbies      String?
   createdAt    DateTime @default(now())
 
   communityPosts    CommunityPost[]

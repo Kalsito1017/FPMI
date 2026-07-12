@@ -38,7 +38,7 @@ export function Login() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  const { setUser, setToken } = useAuth()
+  const { setUser } = useAuth()
 
   const from =
     (location.state as { from?: { pathname: string } } | null)?.from
@@ -51,9 +51,8 @@ export function Login() {
 
   const onSubmit = async (values: LoginValues) => {
     try {
-      const { user, token } = await login(values)
+      const { user } = await login(values)
       setUser(user)
-      setToken(token)
       navigate(from, { replace: true })
     } catch {
       toast.error(t('auth.login.error'))

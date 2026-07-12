@@ -9,13 +9,15 @@ const mockUser: User = {
   email: 'test@example.com',
   role: 'STUDENT',
   avatar: null,
+  specialty: null,
+  hobbies: null,
   createdAt: '2026-01-01T00:00:00.000Z',
 }
 
 describe('auth-store', () => {
   beforeEach(() => {
     localStorage.clear()
-    useAuthStore.setState({ user: null, token: null })
+    useAuthStore.setState({ user: null })
   })
 
   it('setUser stores the user', () => {
@@ -23,17 +25,12 @@ describe('auth-store', () => {
     expect(useAuthStore.getState().user).toEqual(mockUser)
   })
 
-  it('setToken stores the token', () => {
-    useAuthStore.getState().setToken('secret-token')
-    expect(useAuthStore.getState().token).toBe('secret-token')
-  })
-
-  it('isAuthenticated reflects token presence', () => {
+  it('isAuthenticated reflects user presence', () => {
     const { result } = renderHook(() => useIsAuthenticated())
     expect(result.current).toBe(false)
 
     act(() => {
-      useAuthStore.getState().setToken('secret-token')
+      useAuthStore.getState().setUser(mockUser)
     })
     expect(result.current).toBe(true)
 
@@ -43,15 +40,13 @@ describe('auth-store', () => {
     expect(result.current).toBe(false)
   })
 
-  it('logout clears user, token, and localStorage', () => {
+  it('logout clears user and localStorage', () => {
     useAuthStore.getState().setUser(mockUser)
-    useAuthStore.getState().setToken('secret-token')
     expect(localStorage.getItem(AUTH_STORAGE_KEY)).not.toBeNull()
 
     useAuthStore.getState().logout()
 
     expect(useAuthStore.getState().user).toBeNull()
-    expect(useAuthStore.getState().token).toBeNull()
     expect(localStorage.getItem(AUTH_STORAGE_KEY)).toBeNull()
   })
 })

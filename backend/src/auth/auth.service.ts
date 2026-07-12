@@ -27,9 +27,10 @@ export class AuthService {
     private emailService: EmailService,
   ) {}
 
-  private async verifyTurnstile(token: string): Promise<boolean> {
+  private async verifyTurnstile(token?: string): Promise<boolean> {
     const secret = process.env.TURNSTILE_SECRET_KEY;
     if (!secret) return true;
+    if (!token) return false;
 
     const formData = new URLSearchParams();
     formData.append('secret', secret);
@@ -46,7 +47,12 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const valid = await this.verifyTurnstile(dto.turnstileToken);
     if (!valid) {
-      throw new BadRequestException('Invalid CAPTCHA');
+      throw new BadRequestException('CAPTCHA verification failed');
+    }
+
+    const role = (dto.role as any) ?? 'GUEST';
+    if (role === 'STUDENT' && !dto.specialty) {
+      throw new BadRequestException('Specialty is required for students');
     }
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
@@ -56,7 +62,9 @@ export class AuthService {
           name: dto.name,
           email: dto.email,
           passwordHash,
-          role: (dto.role as any) ?? 'GUEST',
+          role,
+          specialty: dto.specialty ?? null,
+          hobbies: dto.hobbies ?? null,
         },
       });
       const token = await this.jwtService.signAsync({ sub: user.id });
@@ -164,10 +172,43 @@ export class AuthService {
   }
 
   async updateProfile(userId: number, dto: UpdateProfileDto) {
+    const data: any = {};
+    if (dto.name !== undefined) data.name = dto.name;
+    if (dto.specialty !== undefined) data.specialty = dto.specialty;
+    if (dto.hobbies !== undefined) data.hobbies = dto.hobbies;
+
     const user = await this.prisma.user.update({
       where: { id: userId },
-      data: { name: dto.name },
+      data,
     });
     return { user: toSafeUser(user) };
+  }
+
+  async exportData(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        communityPosts: true,
+        communityComments: true,
+        communityLikes: true,
+        contactMessages: true,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const { passwordHash, ...safe } = user;
+    return { user: safe };
+  }
+
+  async deleteAccount(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.prisma.user.delete({ where: { id: userId } });
+    return { message: 'Account deleted' };
   }
 }

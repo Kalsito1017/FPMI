@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/use-auth'
+import { logout as apiLogout } from '@/api/auth'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
@@ -20,7 +21,10 @@ export function Navbar() {
   const { t } = useTranslation()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await apiLogout()
+    } catch { /* ignore */ }
     logout()
     navigate('/')
   }

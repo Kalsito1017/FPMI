@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
+import { CookieBanner } from '@/components/CookieBanner'
 
 export function RootLayout() {
   return (
@@ -10,6 +11,7 @@ export function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   )
 }

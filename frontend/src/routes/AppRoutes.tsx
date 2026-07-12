@@ -14,6 +14,8 @@ import { CreatePost } from '@/pages/community/CreatePost'
 import { FAQ } from '@/pages/FAQ'
 import { Login } from '@/pages/Login'
 import { Register } from '@/pages/Register'
+import { Terms } from '@/pages/Terms'
+import { Privacy } from '@/pages/Privacy'
 import { ForgotPassword } from '@/pages/ForgotPassword'
 import { ResetPassword } from '@/pages/ResetPassword'
 import { Profile } from '@/pages/Profile'
@@ -43,6 +45,8 @@ export function AppRoutes() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

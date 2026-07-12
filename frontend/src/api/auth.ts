@@ -1,6 +1,5 @@
 import { apiClient } from './client'
 import type {
-  AuthResponse,
   ChangePasswordInput,
   ForgotPasswordInput,
   LoginInput,
@@ -11,14 +10,18 @@ import type {
 
 export async function register(
   data: RegisterInput,
-): Promise<AuthResponse> {
-  const res = await apiClient.post<AuthResponse>('/auth/register', data)
+): Promise<{ user: User }> {
+  const res = await apiClient.post<{ user: User }>('/auth/register', data)
   return res.data
 }
 
-export async function login(data: LoginInput): Promise<AuthResponse> {
-  const res = await apiClient.post<AuthResponse>('/auth/login', data)
+export async function login(data: LoginInput): Promise<{ user: User }> {
+  const res = await apiClient.post<{ user: User }>('/auth/login', data)
   return res.data
+}
+
+export async function logout(): Promise<void> {
+  await apiClient.post('/auth/logout')
 }
 
 export async function me(): Promise<User> {
@@ -41,7 +44,20 @@ export async function changePassword(data: ChangePasswordInput): Promise<{ messa
   return res.data
 }
 
-export async function updateProfile(data: { name: string }): Promise<{ user: User }> {
+export async function updateProfile(data: {
+  name?: string
+  specialty?: string
+  hobbies?: string
+}): Promise<{ user: User }> {
   const res = await apiClient.patch<{ user: User }>('/auth/me', data)
   return res.data
+}
+
+export async function exportData(): Promise<unknown> {
+  const res = await apiClient.get('/auth/export-data')
+  return res.data
+}
+
+export async function deleteAccount(): Promise<void> {
+  await apiClient.delete('/auth/account')
 }

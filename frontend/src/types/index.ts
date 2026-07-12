@@ -16,6 +16,8 @@ export interface User {
   email: string
   role: Role
   avatar?: string | null
+  specialty?: string | null
+  hobbies?: string | null
   createdAt: string
 }
 
@@ -48,6 +50,8 @@ export interface RegisterInput {
   email: string
   password: string
   role?: string
+  specialty?: string
+  hobbies?: string
   turnstileToken: string
 }
 

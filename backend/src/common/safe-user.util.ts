@@ -9,6 +9,8 @@ export function toSafeUser(user: User): SafeUser {
     email: user.email,
     role: user.role,
     avatar: user.avatar,
+    specialty: user.specialty,
+    hobbies: user.hobbies,
     createdAt: user.createdAt,
   };
 }

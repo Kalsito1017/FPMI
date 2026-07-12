@@ -96,12 +96,23 @@
       "hasAccount": "Already have an account?",
       "login": "Login",
       "error": "Registration failed. This email may be taken.",
-      "captchaRequired": "Please complete the CAPTCHA."
+      "captchaRequired": "Please complete the CAPTCHA.",
+      "next": "Next",
+      "back": "Back",
+      "finish": "Create account",
+      "specialty": "Specialty",
+      "specialtyPlaceholder": "Select your specialty",
+      "specialtyLoading": "Loading specialties…",
+      "hobbies": "Hobbies (optional)",
+      "hobbiesPlaceholder": "e.g. reading, programming, sports",
+      "acceptTerms": "I agree to the",
+      "termsLink": "Terms of Service"
     },
     "errors": {
       "validEmail": "Please enter a valid email.",
       "passwordMin": "Password must be at least 8 characters.",
-      "nameRequired": "Name is required."
+      "nameRequired": "Name is required.",
+      "acceptTerms": "You must accept the Terms of Service."
     },
     "roles": {
       "label": "I am a",
@@ -300,7 +311,9 @@
     "home": "Go home"
   },
   "footer": {
-    "copyright": "FPMI Courses — MIT License"
+    "copyright": "FPMI Courses — MIT License",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
   },
   "admin": {
     "title": "Admin",
@@ -463,6 +476,10 @@
       "loading": "Loading data…"
     }
   },
+  "cookieBanner": {
+    "text": "This site uses essential cookies for authentication. No tracking cookies are used.",
+    "accept": "Got it"
+  },
   "profile": {
     "title": "My Profile",
     "description": "Manage your account settings",
@@ -474,11 +491,89 @@
     "saving": "Saving…",
     "nameUpdated": "Name updated.",
     "nameError": "Could not update name.",
+    "specialty": "Specialty",
+    "specialtyPlaceholder": "Select your specialty",
+    "hobbies": "Hobbies",
+    "hobbiesPlaceholder": "e.g. reading, programming, sports",
     "currentPassword": "Current password",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password",
     "savePassword": "Change password",
     "passwordUpdated": "Password changed.",
-    "passwordError": "Could not change password."
+    "passwordError": "Could not change password.",
+    "tabPrivacy": "Privacy & Data",
+    "exportDataTitle": "Download my data",
+    "exportDataDesc": "Get a copy of all your data stored on this platform in JSON format.",
+    "exportDataBtn": "Export my data",
+    "exporting": "Exporting…",
+    "dataExported": "Your data has been exported.",
+    "dataExportError": "Could not export data.",
+    "deleteAccountTitle": "Delete my account",
+    "deleteAccountDesc": "Permanently delete your account and all associated data. This action cannot be undone.",
+    "deleteAccountBtn": "Delete account",
+    "confirmDeleteBtn": "Yes, delete my account",
+    "deleting": "Deleting…",
+    "accountDeleted": "Account deleted.",
+    "accountDeleteError": "Could not delete account.",
+    "privacyInfo": "For more information about how we handle your data, see our Privacy Policy."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "acceptance": {
+      "title": "Acceptance of Terms",
+      "body": "By accessing or using FPMI Courses, you agree to be bound by these Terms of Service. If you do not agree, you may not use the platform."
+    },
+    "account": {
+      "title": "Account Registration",
+      "body": "You are responsible for maintaining the confidentiality of your account credentials. You must provide accurate and complete information when creating an account."
+    },
+    "content": {
+      "title": "User Content",
+      "body": "You retain ownership of content you submit. By submitting content, you grant the platform a license to display and distribute it. You warrant that your content does not violate any laws or third-party rights."
+    },
+    "conduct": {
+      "title": "Acceptable Use",
+      "body": "You agree not to misuse the platform, including but not limited to: posting spam, harassing others, uploading malicious content, or attempting to bypass security measures."
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "body": "The platform is provided 'as is' without warranties of any kind. The educational content is user-generated and may contain errors. Always verify information with official university sources."
+    },
+    "changes": {
+      "title": "Changes to Terms",
+      "body": "We reserve the right to update these terms. Continued use after changes constitutes acceptance of the new terms."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: July 2025",
+    "dataCollected": {
+      "title": "Data We Collect",
+      "body": "We collect: account information (name, email, password hash), content you submit (posts, comments, wiki edits), and technical data (IP address, browser user agent)."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "body": "We use essential HTTP-only cookies for authentication. These cookies are strictly necessary for the platform to function and do not track you across other websites. No third-party tracking cookies are used."
+    },
+    "purpose": {
+      "title": "Purpose of Processing",
+      "body": "Your data is processed solely to provide the platform's functionality: authentication, content management, and communication between users. We do not sell your data to third parties."
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "body": "We use Cloudflare Turnstile for bot detection (no tracking cookies) and Resend for transactional emails. These services process limited data under their own privacy policies."
+    },
+    "rights": {
+      "title": "Your Rights (GDPR)",
+      "body": "You have the right to: access your data, export a copy, correct inaccuracies, delete your account, and withdraw consent at any time. Exercise these rights from your profile page."
+    },
+    "retention": {
+      "title": "Data Retention",
+      "body": "We retain your data for as long as your account is active. Upon account deletion, your personal information is permanently removed. Public content (posts, comments) may remain anonymized."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For privacy-related inquiries, use our contact form at /contact or reach out to the administration team."
+    }
   }
 }

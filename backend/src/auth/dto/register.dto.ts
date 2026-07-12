@@ -26,7 +26,15 @@ export class RegisterDto {
   @IsIn(ALLOWED_REGISTER_ROLES)
   role?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  turnstileToken: string;
+  specialty?: string;
+
+  @IsOptional()
+  @IsString()
+  hobbies?: string;
+
+  @IsOptional()
+  @IsString()
+  turnstileToken?: string;
 }
