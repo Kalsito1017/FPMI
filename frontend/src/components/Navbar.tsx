@@ -70,9 +70,12 @@ export function Navbar() {
           </div>
           {isAuthenticated ? (
             <>
-              <span className="hidden text-sm text-muted-foreground md:inline">
+              <Link
+                to="/profile"
+                className="hidden text-sm text-muted-foreground underline hover:text-foreground md:inline"
+              >
                 {user?.name}
-              </span>
+              </Link>
               {user?.role === 'ADMIN' && (
                 <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
                   <Link to="/admin/courses">{t('nav.admin')}</Link>
@@ -126,7 +129,13 @@ export function Navbar() {
         <div className="mt-auto border-t pt-4">
           {isAuthenticated ? (
             <div className="flex flex-col gap-2">
-              <span className="text-sm text-muted-foreground">{user?.name}</span>
+              <Link
+                to="/profile"
+                className="text-sm text-muted-foreground underline hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                {user?.name}
+              </Link>
               {user?.role === 'ADMIN' && (
                 <Button asChild variant="outline" size="sm">
                   <Link to="/admin/courses" onClick={() => setMobileOpen(false)}>{t('nav.admin')}</Link>

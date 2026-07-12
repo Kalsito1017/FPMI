@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
@@ -16,7 +20,9 @@ export class AnnouncementsService {
   }
 
   async findOne(id: number) {
-    const announcement = await this.prisma.announcement.findUnique({ where: { id } });
+    const announcement = await this.prisma.announcement.findUnique({
+      where: { id },
+    });
     if (!announcement) throw new NotFoundException('Announcement not found');
     return announcement;
   }
@@ -33,7 +39,10 @@ export class AnnouncementsService {
         },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
         throw new ConflictException('Announcement already exists');
       }
       throw e;
@@ -49,12 +58,15 @@ export class AnnouncementsService {
           ...(dto.content !== undefined && { content: dto.content }),
           ...(dto.source !== undefined && { source: dto.source }),
           ...(dto.sourceUrl !== undefined && { sourceUrl: dto.sourceUrl }),
-          ...(dto.publishedAt !== undefined && { publishedAt: new Date(dto.publishedAt) }),
+          ...(dto.publishedAt !== undefined && {
+            publishedAt: new Date(dto.publishedAt),
+          }),
         },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === 'P2025') throw new NotFoundException('Announcement not found');
+        if (e.code === 'P2025')
+          throw new NotFoundException('Announcement not found');
       }
       throw e;
     }
@@ -64,7 +76,10 @@ export class AnnouncementsService {
     try {
       await this.prisma.announcement.delete({ where: { id } });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
         throw new NotFoundException('Announcement not found');
       }
       throw e;

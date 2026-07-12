@@ -47,11 +47,6 @@ npm install
 npm run dev
 ```
 
-Тестови акаунти (от `backend/prisma/seed.ts`):
-
-- Администратор: `admin@fpmi.bg` / `admin123`
-- Студент: `student@fpmi.bg` / `student123`
-
 ## Допринасяне
 
 Добре дошли сте да допринасяте. Моля, прочетете [CONTRIBUTING.md](CONTRIBUTING.md) за

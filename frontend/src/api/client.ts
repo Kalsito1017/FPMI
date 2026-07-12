@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'sonner'
 import { AUTH_STORAGE_KEY } from '@/lib/constants'
 
 export function getStoredToken(): string | null {
@@ -34,11 +35,18 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
+    if (!axios.isAxiosError(error)) {
+      return Promise.reject(error)
+    }
+    if (error.response?.status === 401) {
       clearStoredAuth()
       if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
         window.location.href = '/login'
       }
+    } else if (!error.response || error.code === 'ERR_NETWORK') {
+      toast.error('Network error. Please check your connection.')
+    } else if (error.response.status >= 500) {
+      toast.error('Something went wrong. Please try again.')
     }
     return Promise.reject(error)
   },

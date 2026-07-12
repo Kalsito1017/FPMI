@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { BookOpen, FileText, Library, FileQuestion, MessagesSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useCourse } from '@/hooks/use-courses'
+import { CoursePageSkeleton } from '@/components/Skeletons'
 import { useSearchStore } from '@/store/search-store'
 import {
   Card,
@@ -23,11 +24,7 @@ export function CoursePage() {
   }, [course, incrementVisit])
 
   if (isLoading) {
-    return (
-      <div className="mx-auto max-w-4xl px-4 py-10">
-        <p className="text-muted-foreground">{t('common.loading')}</p>
-      </div>
-    )
+    return <CoursePageSkeleton />
   }
 
   if (isError || !course) {

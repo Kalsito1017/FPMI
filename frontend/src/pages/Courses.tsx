@@ -2,12 +2,14 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
 import { CourseCard } from '@/components/CourseCard'
+import { CourseCardGridSkeleton } from '@/components/Skeletons'
+import { Button } from '@/components/ui/button'
 import { COURSE_CATEGORIES, type CourseCategory } from '@/types'
 import { cn } from '@/lib/utils'
 
 export function Courses() {
   const { t } = useTranslation()
-  const { data: courses, isLoading } = useCourses()
+  const { data: courses, isLoading, isError } = useCourses()
   const [active, setActive] = useState<CourseCategory | 'All'>('All')
 
   const grouped = useMemo(() => {
@@ -49,7 +51,14 @@ export function Courses() {
       </div>
 
       {isLoading ? (
-        <p className="text-muted-foreground">{t('courses.loadingCourses')}</p>
+        <CourseCardGridSkeleton count={6} />
+      ) : isError ? (
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-muted-foreground">{t('common.error')}</p>
+          <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+            {t('common.retry')}
+          </Button>
+        </div>
       ) : visibleCategories.length === 0 ? (
         <p className="text-muted-foreground">
           {t('courses.noCoursesInCategory')}

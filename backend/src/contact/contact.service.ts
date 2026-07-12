@@ -41,7 +41,10 @@ export class ContactService {
         data: { status: 'RESOLVED' },
       });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
         throw new NotFoundException('Contact message not found');
       }
       throw e;
@@ -52,7 +55,10 @@ export class ContactService {
     try {
       await this.prisma.contactMessage.delete({ where: { id } });
     } catch (e) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
         throw new NotFoundException('Contact message not found');
       }
       throw e;

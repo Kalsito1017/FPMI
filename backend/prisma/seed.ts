@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminHash = await bcrypt.hash('admin123', 10);
+  const adminHash = await bcrypt.hash('yAi0iPnHM9SEjBZ2ZVAXRW/U3oydhLUc4WT0TM1ZJPE=', 10);
   const studentHash = await bcrypt.hash('student123', 10);
 
   await prisma.user.upsert({

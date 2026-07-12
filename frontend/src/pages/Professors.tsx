@@ -1,6 +1,8 @@
 import { Mail, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useProfessors } from '@/hooks/use-professors'
+import { ProfessorCardSkeleton } from '@/components/Skeletons'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -10,7 +12,7 @@ import {
 
 export function Professors() {
   const { t } = useTranslation()
-  const { data: professors, isLoading } = useProfessors()
+  const { data: professors, isLoading, isError } = useProfessors()
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -18,7 +20,18 @@ export function Professors() {
         {t('professors.title')}
       </h1>
       {isLoading ? (
-        <p className="text-muted-foreground">{t('professors.loading')}</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <ProfessorCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-muted-foreground">{t('common.error')}</p>
+          <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+            {t('common.retry')}
+          </Button>
+        </div>
       ) : (professors ?? []).length === 0 ? (
         <p className="text-muted-foreground">{t('professors.noProfessors')}</p>
       ) : (

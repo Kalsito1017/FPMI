@@ -7,7 +7,12 @@
     "delete": "Delete",
     "actions": "Actions",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "error": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please check your connection.",
+    "retry": "Retry",
+    "pageNotFound": "Page not found",
+    "goBack": "Go back"
   },
   "nav": {
     "home": "Home",
@@ -40,7 +45,34 @@
     "noResults": "No courses found.",
     "remove": "Remove"
   },
-  "auth": {
+    "auth": {
+    "forgot": {
+      "title": "Forgot password",
+      "description": "Enter your email and we'll send you a reset link.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending…",
+      "sentTitle": "Check your email",
+      "sentDesc": "If that email is registered, we've sent a password reset link.",
+      "backToLogin": "Back to login",
+      "error": "Could not send reset link."
+    },
+    "reset": {
+      "title": "Reset password",
+      "description": "Choose a new password.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "passwordsMismatch": "Passwords do not match.",
+      "submit": "Reset password",
+      "submitting": "Resetting…",
+      "doneTitle": "Password reset",
+      "doneDesc": "Your password has been reset. You can now log in.",
+      "invalidTitle": "Invalid link",
+      "invalidDesc": "This reset link is invalid or expired.",
+      "requestNew": "Request a new link",
+      "missingToken": "No reset token found in the URL.",
+      "error": "Could not reset password. The link may be expired."
+    },
     "login": {
       "title": "Login",
       "description": "Welcome back. Sign in to your FPMI Courses account.",
@@ -50,7 +82,8 @@
       "submitting": "Signing in…",
       "noAccount": "Don't have an account?",
       "register": "Register",
-      "error": "Invalid email or password."
+      "error": "Invalid email or password.",
+      "forgotPassword": "Forgot password?"
     },
     "register": {
       "title": "Create account",
@@ -62,7 +95,8 @@
       "submitting": "Creating…",
       "hasAccount": "Already have an account?",
       "login": "Login",
-      "error": "Registration failed. This email may be taken."
+      "error": "Registration failed. This email may be taken.",
+      "captchaRequired": "Please complete the CAPTCHA."
     },
     "errors": {
       "validEmail": "Please enter a valid email.",
@@ -119,7 +153,8 @@
       "createComment": "Could not add comment.",
       "updateComment": "Could not update comment.",
       "deleteComment": "Could not delete comment.",
-      "likeFailed": "Could not update like."
+      "likeFailed": "Could not update like.",
+      "loadFailed": "Failed to load posts. Please try again."
     },
     "deleteConfirm": "Are you sure you want to delete this post?",
     "loginToPost": "Login to create a post",
@@ -253,6 +288,9 @@
       "BUG_REPORT": "Bug Report",
       "SPAM": "Spam Report",
       "OTHER": "Other"
+    },
+    "errors": {
+      "submitFailed": "Failed to send message. Please try again."
     }
   },
   "notFound": {
@@ -424,5 +462,23 @@
       "users": "Users",
       "loading": "Loading data…"
     }
+  },
+  "profile": {
+    "title": "My Profile",
+    "description": "Manage your account settings",
+    "tabProfile": "Profile",
+    "tabSecurity": "Security",
+    "name": "Name",
+    "email": "Email",
+    "saveName": "Save name",
+    "saving": "Saving…",
+    "nameUpdated": "Name updated.",
+    "nameError": "Could not update name.",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "savePassword": "Change password",
+    "passwordUpdated": "Password changed.",
+    "passwordError": "Could not change password."
   }
 }

@@ -28,7 +28,9 @@ export class AnnouncementsController {
   @Public()
   @Get()
   findAll(@Query('limit') limit?: string) {
-    return this.announcementsService.findAll(limit ? parseInt(limit, 10) : undefined);
+    return this.announcementsService.findAll(
+      limit ? parseInt(limit, 10) : undefined,
+    );
   }
 
   @Public()
@@ -52,7 +54,10 @@ export class AnnouncementsController {
 
   @Roles(Role.ADMIN, Role.MODERATOR)
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateAnnouncementDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateAnnouncementDto,
+  ) {
     return this.announcementsService.update(id, dto);
   }
 

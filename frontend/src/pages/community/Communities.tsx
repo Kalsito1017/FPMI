@@ -18,7 +18,7 @@ export function Communities() {
   const { isAuthenticated } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get('page')) || 1
-  const { data, isLoading } = usePosts(page)
+  const { data, isLoading, isError } = usePosts(page)
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -55,6 +55,18 @@ export function Communities() {
             </Card>
           ))}
         </div>
+      ) : isError ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('community.errors.loadFailed')}</CardTitle>
+            <CardDescription className="flex flex-col items-start gap-2">
+              <span>{t('common.error')}</span>
+              <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+                {t('common.retry')}
+              </Button>
+            </CardDescription>
+          </CardHeader>
+        </Card>
       ) : data?.data.length === 0 ? (
         <Card>
           <CardHeader>

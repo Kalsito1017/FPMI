@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { Turnstile } from '@marsidev/react-turnstile'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { register } from '@/api/auth'
@@ -28,7 +30,7 @@ import { RoleSelector } from '@/components/RoleSelector'
 function makeRegisterSchema(t: (key: string) => string) {
   return z.object({
     name: z.string().min(1, t('auth.errors.nameRequired')),
-    email: z.string().email(t('auth.errors.validEmail')),
+    email: z.string().trim().email(t('auth.errors.validEmail')),
     password: z.string().min(8, t('auth.errors.passwordMin')),
     role: z.string().optional(),
   })
@@ -40,6 +42,7 @@ export function Register() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { setUser, setToken } = useAuth()
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
 
   const form = useForm<RegisterValues>({
     resolver: zodResolver(makeRegisterSchema(t)),
@@ -47,8 +50,12 @@ export function Register() {
   })
 
   const onSubmit = async (values: RegisterValues) => {
+    if (!turnstileToken) {
+      toast.error(t('auth.register.captchaRequired'))
+      return
+    }
     try {
-      const { user, token } = await register(values)
+      const { user, token } = await register({ ...values, turnstileToken })
       setUser(user)
       setToken(token)
       navigate('/', { replace: true })
@@ -119,10 +126,14 @@ export function Register() {
                   </FormItem>
                 )}
               />
+              <Turnstile
+                siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA0000000000000000000'}
+                onSuccess={setTurnstileToken}
+              />
               <Button
                 type="submit"
                 className="w-full"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || !turnstileToken}
               >
                 {form.formState.isSubmitting
                   ? t('auth.register.submitting')

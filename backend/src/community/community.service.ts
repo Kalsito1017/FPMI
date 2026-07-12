@@ -134,7 +134,11 @@ export class CommunityService {
     if (!post) {
       throw new NotFoundException('Post not found');
     }
-    if (post.authorId !== userId && role !== Role.MODERATOR && role !== Role.ADMIN) {
+    if (
+      post.authorId !== userId &&
+      role !== Role.MODERATOR &&
+      role !== Role.ADMIN
+    ) {
       throw new ForbiddenException('You can only edit your own posts');
     }
     return this.prisma.communityPost.update({
@@ -155,7 +159,11 @@ export class CommunityService {
     if (!post) {
       throw new NotFoundException('Post not found');
     }
-    if (post.authorId !== userId && role !== Role.MODERATOR && role !== Role.ADMIN) {
+    if (
+      post.authorId !== userId &&
+      role !== Role.MODERATOR &&
+      role !== Role.ADMIN
+    ) {
       throw new ForbiddenException('You can only delete your own posts');
     }
     await this.prisma.communityPost.delete({ where: { id } });
@@ -223,7 +231,11 @@ export class CommunityService {
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
-    if (comment.authorId !== userId && role !== Role.MODERATOR && role !== Role.ADMIN) {
+    if (
+      comment.authorId !== userId &&
+      role !== Role.MODERATOR &&
+      role !== Role.ADMIN
+    ) {
       throw new ForbiddenException('You can only edit your own comments');
     }
     return this.prisma.communityComment.update({
@@ -244,7 +256,11 @@ export class CommunityService {
     if (!comment) {
       throw new NotFoundException('Comment not found');
     }
-    if (comment.authorId !== userId && role !== Role.MODERATOR && role !== Role.ADMIN) {
+    if (
+      comment.authorId !== userId &&
+      role !== Role.MODERATOR &&
+      role !== Role.ADMIN
+    ) {
       throw new ForbiddenException('You can only delete your own comments');
     }
     await this.prisma.communityComment.delete({ where: { id } });

@@ -1,4 +1,10 @@
-import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ANNOUNCEMENT_SOURCES } from './create-announcement.dto';
 
 export class UpdateAnnouncementDto {

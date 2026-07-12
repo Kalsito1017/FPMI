@@ -14,7 +14,7 @@ const sourceConfig: Record<AnnouncementSource, { icon: typeof Newspaper; label: 
 
 export function Announcements() {
   const { t } = useTranslation()
-  const { data: announcements, isLoading } = useAnnouncements()
+  const { data: announcements, isLoading, isError } = useAnnouncements()
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10">
@@ -27,6 +27,15 @@ export function Announcements() {
             <Skeleton key={i} className="h-32 w-full rounded-lg" />
           ))}
         </div>
+      ) : isError ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('common.error')}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-start gap-2">
+            <p className="text-sm text-muted-foreground">{t('common.networkError')}</p>
+          </CardContent>
+        </Card>
       ) : !announcements || announcements.length === 0 ? (
         <Card>
           <CardHeader>

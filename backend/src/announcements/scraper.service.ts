@@ -25,14 +25,18 @@ export class ScraperService {
         const result = await this.scrapeUniversity(universityUrl);
         results.push({ source: 'university', ...result });
       } catch (e) {
-        this.logger.error(`Failed to scrape university URL: ${(e as Error).message}`);
+        this.logger.error(
+          `Failed to scrape university URL: ${(e as Error).message}`,
+        );
       }
     }
 
     return results;
   }
 
-  private async scrapeUniversity(url: string): Promise<{ added: number; skipped: number }> {
+  private async scrapeUniversity(
+    url: string,
+  ): Promise<{ added: number; skipped: number }> {
     const { data: html } = await axios.get<string>(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; FPMI-Hub-Bot/1.0)' },
       timeout: 15000,
@@ -95,7 +99,9 @@ export class ScraperService {
 
     for (const el of container) {
       const $el = $(el);
-      const titleEl = $el.find('h1, h2, h3, h4, .title, .post-title, .entry-title').first();
+      const titleEl = $el
+        .find('h1, h2, h3, h4, .title, .post-title, .entry-title')
+        .first();
       const title = titleEl.text().trim();
 
       const linkEl = titleEl.find('a').first();
@@ -106,19 +112,32 @@ export class ScraperService {
           : new URL(href, process.env.SCRAPE_UNIVERSITY_URL).href
         : '';
 
-      const content = $el.find('p, .description, .excerpt, .post-excerpt, .summary')
+      const content = $el
+        .find('p, .description, .excerpt, .post-excerpt, .summary')
         .first()
         .text()
         .trim()
         .slice(0, 500);
 
       const dateText =
-        $el.find('time, .date, .post-date, .published, .meta-date').first().attr('datetime') ??
-        $el.find('time, .date, .post-date, .published, .meta-date').first().text().trim();
+        $el
+          .find('time, .date, .post-date, .published, .meta-date')
+          .first()
+          .attr('datetime') ??
+        $el
+          .find('time, .date, .post-date, .published, .meta-date')
+          .first()
+          .text()
+          .trim();
       const publishedAt = dateText ? new Date(dateText) : new Date();
 
       if (title) {
-        items.push({ title, content, sourceUrl, publishedAt: isNaN(publishedAt.getTime()) ? new Date() : publishedAt });
+        items.push({
+          title,
+          content,
+          sourceUrl,
+          publishedAt: isNaN(publishedAt.getTime()) ? new Date() : publishedAt,
+        });
       }
     }
 

@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input'
 
 function makeLoginSchema(t: (key: string) => string) {
   return z.object({
-    email: z.string().email(t('auth.errors.validEmail')),
+    email: z.string().trim().email(t('auth.errors.validEmail')),
     password: z.string().min(8, t('auth.errors.passwordMin')),
   })
 }
@@ -96,6 +96,14 @@ export function Login() {
                   </FormItem>
                 )}
               />
+              <div className="flex justify-end">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-muted-foreground underline hover:text-foreground"
+                >
+                  {t('auth.login.forgotPassword')}
+                </Link>
+              </div>
               <Button
                 type="submit"
                 className="w-full"

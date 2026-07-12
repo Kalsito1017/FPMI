@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { EmailService } from '../email/email.service';
 
 jest.mock('bcrypt', () => ({
   hash: jest.fn(),
@@ -36,11 +37,14 @@ describe('AuthService', () => {
     };
     jwtService = { signAsync: jest.fn() };
 
+    const emailService = { sendPasswordReset: jest.fn() };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         { provide: PrismaService, useValue: prisma },
         { provide: JwtService, useValue: jwtService },
+        { provide: EmailService, useValue: emailService },
       ],
     }).compile();
 

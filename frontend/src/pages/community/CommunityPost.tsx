@@ -37,7 +37,7 @@ export function CommunityPost() {
   const { user, isAuthenticated } = useAuth()
 
   const postId = Number(id)
-  const { data: post, isLoading } = usePost(postId)
+  const { data: post, isLoading, isError } = usePost(postId)
   const toggleLike = useToggleLike()
   const createComment = useCreateComment()
   const deleteComment = useDeleteComment()
@@ -114,12 +114,28 @@ export function CommunityPost() {
     )
   }
 
+  if (isError) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <p className="text-muted-foreground">{t('community.errors.loadFailed')}</p>
+        <div className="mt-2 flex gap-2">
+          <Button asChild variant="link">
+            <Link to="/community">&larr; {t('community.title')}</Link>
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+            {t('common.retry')}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   if (!post) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-8">
         <p className="text-muted-foreground">Post not found.</p>
         <Button asChild variant="link" className="mt-2">
-          <Link to="/community">&larr; Back to community</Link>
+          <Link to="/community">&larr; {t('community.title')}</Link>
         </Button>
       </div>
     )

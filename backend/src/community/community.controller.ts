@@ -26,10 +26,7 @@ export class CommunityController {
 
   @Public()
   @Get('posts')
-  findAllPosts(
-    @Query() query: QueryPostsDto,
-    @CurrentUser() user?: User,
-  ) {
+  findAllPosts(@Query() query: QueryPostsDto, @CurrentUser() user?: User) {
     return this.communityService.findAllPosts(query, user?.id);
   }
 
@@ -43,10 +40,7 @@ export class CommunityController {
   }
 
   @Post('posts')
-  createPost(
-    @Body() dto: CreatePostDto,
-    @CurrentUser() user: User,
-  ) {
+  createPost(@Body() dto: CreatePostDto, @CurrentUser() user: User) {
     return this.communityService.createPost(dto, user.id);
   }
 
@@ -61,26 +55,17 @@ export class CommunityController {
 
   @HttpCode(204)
   @Delete('posts/:id')
-  deletePost(
-    @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: User,
-  ) {
+  deletePost(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.communityService.deletePost(id, user.id, user.role);
   }
 
   @Post('posts/:id/like')
-  toggleLike(
-    @Param('id', ParseIntPipe) id: number,
-    @CurrentUser() user: User,
-  ) {
+  toggleLike(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.communityService.toggleLike(id, user.id);
   }
 
   @Post('comments')
-  createComment(
-    @Body() dto: CreateCommentDto,
-    @CurrentUser() user: User,
-  ) {
+  createComment(@Body() dto: CreateCommentDto, @CurrentUser() user: User) {
     return this.communityService.createComment(dto, user.id);
   }
 

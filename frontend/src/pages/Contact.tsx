@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useTranslation } from 'react-i18next'
 import { Send, CheckCircle } from 'lucide-react'
+import { toast } from 'sonner'
 import { useCreateContactMessage } from '@/hooks/use-contact'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -50,7 +51,7 @@ export function Contact() {
       await create.mutateAsync(values)
       setDone(true)
     } catch {
-      // error handled by form
+      toast.error(t('contact.errors.submitFailed'))
     }
   }
 

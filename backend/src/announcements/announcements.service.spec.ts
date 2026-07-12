@@ -40,7 +40,10 @@ describe('AnnouncementsService', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AnnouncementsService, { provide: PrismaService, useValue: prisma }],
+      providers: [
+        AnnouncementsService,
+        { provide: PrismaService, useValue: prisma },
+      ],
     }).compile();
 
     service = module.get(AnnouncementsService);
@@ -139,7 +142,9 @@ describe('AnnouncementsService', () => {
       );
       prisma.announcement.update.mockRejectedValue(prismaError);
 
-      await expect(service.update(999, { title: 'Nope' })).rejects.toThrow(NotFoundException);
+      await expect(service.update(999, { title: 'Nope' })).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
 import { useAnnouncements } from '@/hooks/use-announcements'
 import { CourseCard } from '@/components/CourseCard'
+import { CourseCardGridSkeleton } from '@/components/Skeletons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -26,8 +27,8 @@ export function Home() {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
-  const { data: courses, isLoading } = useCourses()
-  const { data: latestAnnouncements } = useAnnouncements(3)
+  const { data: courses, isLoading, isError: coursesError } = useCourses()
+  const { data: latestAnnouncements, isError: annError } = useAnnouncements(3)
 
   const recentSearches = useSearchStore((s) => s.recentSearches)
   const visits = useSearchStore((s) => s.visits)
@@ -129,8 +130,10 @@ export function Home() {
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-2xl font-semibold">{t('home.popularCourses')}</h2>
         </div>
-        {isLoading ? (
-          <p className="text-muted-foreground">{t('home.loadingCourses')}</p>
+        {coursesError ? (
+          <p className="text-muted-foreground">{t('common.error')}</p>
+        ) : isLoading ? (
+          <CourseCardGridSkeleton count={6} />
         ) : popular.length === 0 ? (
           <p className="text-muted-foreground">{t('home.noCourses')}</p>
         ) : (
@@ -149,7 +152,13 @@ export function Home() {
             <Link to="/announcements">{t('announcements.readMore')}</Link>
           </Button>
         </div>
-        {!latestAnnouncements || latestAnnouncements.length === 0 ? (
+        {annError ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('common.error')}</CardTitle>
+            </CardHeader>
+          </Card>
+        ) : !latestAnnouncements || latestAnnouncements.length === 0 ? (
           <Card>
             <CardHeader>
               <CardTitle>{t('home.noAnnouncements')}</CardTitle>

@@ -1,4 +1,11 @@
-import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 const ALLOWED_REGISTER_ROLES = ['GUEST', 'STUDENT', 'TEACHER'] as const;
 
@@ -18,4 +25,8 @@ export class RegisterDto {
   @IsString()
   @IsIn(ALLOWED_REGISTER_ROLES)
   role?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  turnstileToken: string;
 }
