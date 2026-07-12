@@ -1,0 +1,299 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "delete": "Delete",
+    "actions": "Actions",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "professors": "Professors",
+    "faq": "FAQ",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "admin": "Admin"
+  },
+  "home": {
+    "title": "FPMI Courses",
+    "subtitle": "Student notes and wiki for courses",
+    "browseCourses": "Browse courses",
+    "searchPlaceholder": "Search courses…",
+    "popularCourses": "Popular courses",
+    "loadingCourses": "Loading courses…",
+    "noCourses": "No courses yet.",
+    "announcements": "Announcements",
+    "noAnnouncements": "No announcements yet",
+    "noAnnouncementsDesc": "Announcements will appear here in a future phase.",
+    "recentSearches": "Recent searches",
+    "clear": "Clear",
+    "mostVisited": "Most visited",
+    "coursesLabel": "Courses",
+    "noResults": "No courses found.",
+    "remove": "Remove"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "description": "Welcome back. Sign in to your FPMI Courses account.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "submitting": "Signing in…",
+      "noAccount": "Don't have an account?",
+      "register": "Register",
+      "error": "Invalid email or password."
+    },
+    "register": {
+      "title": "Create account",
+      "description": "Register to contribute to FPMI Courses.",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Register",
+      "submitting": "Creating…",
+      "hasAccount": "Already have an account?",
+      "login": "Login",
+      "error": "Registration failed. This email may be taken."
+    },
+    "errors": {
+      "validEmail": "Please enter a valid email.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "nameRequired": "Name is required."
+    }
+  },
+  "courses": {
+    "title": "Courses",
+    "all": "All",
+    "noCoursesInCategory": "No courses found in this category.",
+    "loadingCourses": "Loading courses…"
+  },
+  "course": {
+    "notFound": "Course not found",
+    "notFoundDesc": "We couldn't find the course you're looking for.",
+    "backToCourses": "Back to courses",
+    "backToCoursesShort": "← Courses",
+    "semester": "Semester",
+    "credits": "Credits",
+    "noDescription": "No description.",
+    "wikiPages": "Wiki pages",
+    "assignments": "Assignments",
+    "resources": "Resources",
+    "oldExams": "Past exams",
+    "forum": "Forum",
+    "comingSoon": "Coming soon."
+  },
+  "courseCard": {
+    "credits": "credits",
+    "semester": "Semester",
+    "noDescription": "No description.",
+    "semesterLabel": "Semester —"
+  },
+  "professors": {
+    "title": "Professors",
+    "loading": "Loading professors…",
+    "noProfessors": "No professors yet."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "subtitle": "Everything you need to know about FPMI Courses",
+    "searchPlaceholder": "Search questions…",
+    "noResults": "No results for \"{{query}}\".",
+    "categories": {
+      "general": "General",
+      "content": "Content",
+      "courses": "Courses and professors",
+      "forums": "Forums and discussions",
+      "support": "Support and reports",
+      "dev": "Development"
+    },
+    "items": {
+      "whatIs": {
+        "q": "What is FPMI Courses?",
+        "a": "FPMI Courses is a platform created by students for students at the Faculty of Applied Mathematics and Informatics (FPMI) at the Technical University of Sofia. It offers collaboratively edited notes, wiki pages for courses, assignments, resources, past exams, and discussion forums."
+      },
+      "whoCanUse": {
+        "q": "Who can use the platform?",
+        "a": "Anyone can browse content as a guest. Students can register to create and edit wiki pages, post in forums, rate professors, and submit reports or suggestions."
+      },
+      "howContribute": {
+        "q": "How can I contribute content?",
+        "a": "Simply register and open any wiki page for editing. Make your changes, add a brief summary (what and why you changed), and submit. Your edit will be reviewed by a moderator before being published."
+      },
+      "howApproval": {
+        "q": "How does edit approval work?",
+        "a": "When you edit a page, the new version awaits moderator approval. The moderator reviews the diff between the old and new version, then can approve or reject the change. This ensures content quality while allowing any student to contribute."
+      },
+      "whatIsWiki": {
+        "q": "What is a wiki page?",
+        "a": "Wiki pages are the primary way to write notes for courses. They support Markdown formatting with the ability to add tables, code, images, and links."
+      },
+      "whatCourses": {
+        "q": "What courses are available?",
+        "a": "The platform covers courses from FPMI specialties, grouped into categories: Programming, Mathematics, Data Analytics, AI, Databases, Networks, and Cybersecurity."
+      },
+      "professorInfo": {
+        "q": "Can I find information about professors?",
+        "a": "Yes, in the \"Professors\" section you'll find profiles with office, email, bio, and the courses they teach. You can also rate and leave a review for a professor."
+      },
+      "hasForum": {
+        "q": "Is there a discussion forum?",
+        "a": "Yes, each course has its own forum where you can ask questions, discuss materials, and help each other. Each wiki page has a \"Discuss\" button that leads to the corresponding forum thread."
+      },
+      "howReport": {
+        "q": "How can I report an issue or give a suggestion?",
+        "a": "Use the contact/support form, available to registered users. You can choose a type: suggestion, feature request, bug report, spam report, or other."
+      },
+      "howReportContent": {
+        "q": "How do I report inappropriate content?",
+        "a": "Every wiki page, forum post, and review has a \"Report\" button that automatically fills in the type as \"spam\" and a link to the content. Moderators will review your report."
+      },
+      "isOpenSource": {
+        "q": "Is the project open source?",
+        "a": "Yes, the entire codebase is MIT-licensed and available on GitHub. Anyone can fork the project, self-host it, or contribute code."
+      },
+      "howContributeDev": {
+        "q": "How can I contribute as a developer?",
+        "a": "You can open an issue on GitHub or create a pull request (fork → branch → PR). CI checks lint, types, tests, and build. See CONTRIBUTING.md for local setup instructions."
+      }
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist.",
+    "home": "Go home"
+  },
+  "footer": {
+    "copyright": "FPMI Courses — MIT License"
+  },
+  "admin": {
+    "title": "Admin",
+    "courses": "Courses",
+    "professors": "Professors",
+    "users": "Users",
+    "backToSite": "← Back to site",
+    "importExport": "Import/Export",
+    "analytics": "Analytics",
+    "coursesPage": {
+      "title": "Course management",
+      "newCourse": "New course",
+      "titleCol": "Title",
+      "slugCol": "Slug",
+      "categoryCol": "Category",
+      "semesterCol": "Semester",
+      "creditsCol": "Credits",
+      "actionsCol": "Actions",
+      "loading": "Loading…",
+      "noCourses": "No courses yet.",
+      "created": "Course created.",
+      "createError": "Course could not be created.",
+      "updated": "Course updated.",
+      "updateError": "Course could not be updated.",
+      "deleted": "Course deleted.",
+      "deleteError": "Course could not be deleted.",
+      "deleteTitle": "Delete course",
+      "deleteConfirm": "Are you sure you want to delete \"{{title}}\"? This action is irreversible.",
+      "editTitle": "Edit course",
+      "newTitle": "New course",
+      "editDesc": "Update the course details below.",
+      "newDesc": "Add a new course to the catalog.",
+      "titleLabel": "Title",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "intro-to-programming",
+      "slugDisabled": "Slug cannot be changed.",
+      "descriptionLabel": "Description",
+      "semesterLabel": "Semester",
+      "creditsLabel": "Credits",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Select category",
+      "errors": {
+        "titleRequired": "Title is required.",
+        "slugRequired": "Slug is required.",
+        "slugFormat": "Use lowercase letters, digits, and hyphens.",
+        "semesterRange": "Semester must be 1–8.",
+        "creditsNonNeg": "Credits must be a non-negative number."
+      }
+    },
+    "professorsPage": {
+      "title": "Professor management",
+      "newProfessor": "New professor",
+      "nameCol": "Name",
+      "emailCol": "Email",
+      "officeCol": "Office",
+      "actionsCol": "Actions",
+      "loading": "Loading…",
+      "noProfessors": "No professors yet.",
+      "created": "Professor created.",
+      "createError": "Professor could not be created.",
+      "updated": "Professor updated.",
+      "updateError": "Professor could not be updated.",
+      "deleted": "Professor deleted.",
+      "deleteError": "Professor could not be deleted.",
+      "deleteTitle": "Delete professor",
+      "deleteConfirm": "Are you sure you want to delete \"{{name}}\"? This action is irreversible.",
+      "editTitle": "Edit professor",
+      "newTitle": "New professor",
+      "editDesc": "Update the professor details below.",
+      "newDesc": "Add a new professor.",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "officeLabel": "Office",
+      "bioLabel": "Bio",
+      "photoLabel": "Photo URL",
+      "errors": {
+        "nameRequired": "Name is required.",
+        "validEmail": "Please enter a valid email."
+      }
+    },
+    "usersPage": {
+      "title": "User management",
+      "nameCol": "Name",
+      "emailCol": "Email",
+      "roleCol": "Role",
+      "loading": "Loading…",
+      "noUsers": "No users yet.",
+      "roleUpdated": "Role updated.",
+      "roleUpdateError": "Role could not be updated."
+    },
+    "importExport": {
+      "title": "Import / Export courses",
+      "exportTitle": "Export",
+      "exportDesc": "Download all courses as a CSV file.",
+      "exportBtn": "Export CSV",
+      "exporting": "Exporting…",
+      "importTitle": "Import",
+      "importDesc": "Upload a CSV file with courses. Duplicate slugs will be skipped.",
+      "importBtn": "Import CSV",
+      "importing": "Importing…",
+      "importSuccess": "Import complete: {{created}} created, {{skipped}} skipped.",
+      "importError": "Import failed.",
+      "preview": "Preview",
+      "results": "Results",
+      "created": "Created",
+      "skipped": "Skipped",
+      "errors": "Errors",
+      "row": "Row"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "overview": "Overview",
+      "totalUsers": "Total users",
+      "totalCourses": "Total courses",
+      "totalProfessors": "Total professors",
+      "totalAdmins": "Admins",
+      "usersByRole": "Users by role",
+      "coursesByCategory": "Courses by category",
+      "coursesBySemester": "Courses by semester",
+      "userGrowth": "User growth",
+      "month": "Month",
+      "users": "Users",
+      "loading": "Loading data…"
+    }
+  }
+}

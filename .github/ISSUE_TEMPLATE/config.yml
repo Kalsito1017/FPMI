@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: FPMI Hub Support
+    url: https://fpmi.example/support
+    about: Use the in-app Contact/Support form

@@ -1,0 +1,59 @@
+name: fpmi-hub
+
+services:
+  db:
+    image: postgres:16
+    container_name: fpmi-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: fpmi
+      POSTGRES_PASSWORD: fpmi
+      POSTGRES_DB: fpmi
+    volumes:
+      - fpmi-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fpmi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: fpmi-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://fpmi:fpmi@db:5432/fpmi?schema=public"
+      JWT_SECRET: "dev-secret-change-me"
+      CORS_ORIGIN: "http://localhost:5174"
+      PORT: "3000"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: sh -c "npx prisma migrate deploy && npm run prisma:seed && npm run start:dev"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: fpmi-frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: "http://localhost:3001"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "5174:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+    restart: unless-stopped
+
+volumes:
+  fpmi-pgdata:
