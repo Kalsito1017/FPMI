@@ -1,64 +1,63 @@
-# FPMI Hub
+# ФМИ Хъб
 
-A student-editable course and wiki platform for the Faculty of Applied
-Mathematics and Informatics (FPMI) at the Technical University of Sofia.
-FPMI Hub lets students browse courses and professors, while staff and
-moderators curate the catalogue through a simple admin interface.
+Платформа за курсове и учебни материали за Факултета по математика и информатика (ФМИ)
+към Пловдивски университет. ФМИ Хъб позволява на студентите да разглеждат курсове и
+преподаватели, докато служители и модератори поддържат каталога чрез прост
+административен интерфейс.
 
-## Tech stack
+## Технологичен стек
 
-| Layer    | Technology                          |
-|----------|------------------------------------|
-| Frontend | React + TypeScript + Vite          |
-| Backend  | NestJS + Prisma ORM                 |
-| Database | PostgreSQL 16                       |
-| Testing  | Vitest (frontend) / Jest (backend)  |
-| Tooling  | npm, Docker Compose, GitHub Actions |
+| Слой      | Технология                          |
+|-----------|-------------------------------------|
+| Frontend  | React + TypeScript + Vite           |
+| Backend   | NestJS + Prisma ORM                 |
+| База данни| PostgreSQL 16                       |
+| Тестване  | Vitest (frontend) / Jest (backend)  |
+| Инструменти| npm, Docker Compose, GitHub Actions|
 
-The shared API contract between frontend and backend lives in
+Споделеният API договор между frontend и backend се намира в
 [`docs/api-contract.md`](docs/api-contract.md).
 
-## Prerequisites
+## Изисквания
 
-- **Node.js 20+** (LTS recommended)
-- **npm** (bundled with Node.js)
-- **Docker** and **Docker Compose** (for the local PostgreSQL database)
+- **Node.js 20+** (препоръчва се LTS)
+- **npm** (вграден в Node.js)
+- **Docker** и **Docker Compose** (за локална PostgreSQL база данни)
 
-## Quick local setup
+## Бърза локална настройка
 
 ```bash
-# 1. Clone the repository
+# 1. Клонирайте хранилището
 git clone <repo-url>
 cd ФПМИ
 
-# 2. Start the PostgreSQL database
+# 2. Стартирайте PostgreSQL базата данни
 docker compose up -d
 
-# 3. Start the backend (http://localhost:3000)
+# 3. Стартирайте backend (http://localhost:3000)
 cd backend
 npm install
 npm run prisma:migrate
 npm run prisma:seed
 npm run start:dev
 
-# 4. Start the frontend (http://localhost:5173) in a new terminal
+# 4. Стартирайте frontend (http://localhost:5173) в нов терминал
 cd frontend
 npm install
 npm run dev
 ```
 
-Seed accounts (from `backend/prisma/seed.ts`):
+Тестови акаунти (от `backend/prisma/seed.ts`):
 
-- Admin: `admin@fpmi.bg` / `admin123`
-- Student: `student@fpmi.bg` / `student123`
+- Администратор: `admin@fpmi.bg` / `admin123`
+- Студент: `student@fpmi.bg` / `student123`
 
-## Contributing
+## Допринасяне
 
-Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
-local development setup, coding conventions, and the pull-request checklist,
-and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community expectations.
+Добре дошли сте да допринасяте. Моля, прочетете [CONTRIBUTING.md](CONTRIBUTING.md) за
+локална настройка, конвенции за код и списък за проверка на pull request-и,
+и [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) за очакванията към общността.
 
-## License
+## Лиценз
 
-Released under the [MIT License](LICENSE) — Copyright (c) 2026 FPMI Hub
-Contributors.
+Разпространява се под [MIT License](LICENSE) — Copyright (c) 2026 ФМИ Хъб Contributors
