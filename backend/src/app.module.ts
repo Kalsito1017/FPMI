@@ -9,6 +9,7 @@ import { ProfessorsModule } from './professors/professors.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { CommunityModule } from './community/community.module';
+import { ContactModule } from './contact/contact.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/roles.guard';
 
@@ -23,6 +24,7 @@ import { RolesGuard } from './common/roles.guard';
     AnalyticsModule,
     AnnouncementsModule,
     CommunityModule,
+    ContactModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

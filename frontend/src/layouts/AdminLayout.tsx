@@ -40,6 +40,9 @@ export function AdminLayout() {
         <NavLink to="/admin/announcements" className={sidebarLinkClass} onClick={() => setMobileOpen(false)}>
           {t('admin.announcements')}
         </NavLink>
+        <NavLink to="/admin/contact" className={sidebarLinkClass} onClick={() => setMobileOpen(false)}>
+          {t('admin.contact')}
+        </NavLink>
       </nav>
       <Link
         to="/"

@@ -23,13 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { RoleSelector } from '@/components/RoleSelector'
 
 function makeRegisterSchema(t: (key: string) => string) {
   return z.object({
@@ -64,7 +58,7 @@ export function Register() {
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 py-12">
+    <div className="mx-auto max-w-lg px-4 py-12">
       <Card>
         <CardHeader>
           <CardTitle>{t('auth.register.title')}</CardTitle>
@@ -118,24 +112,9 @@ export function Register() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t('auth.roles.label')}</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="GUEST">
-                          {t('auth.roles.guest')} — {t('auth.roles.guestDesc')}
-                        </SelectItem>
-                        <SelectItem value="STUDENT">
-                          {t('auth.roles.student')} — {t('auth.roles.studentDesc')}
-                        </SelectItem>
-                        <SelectItem value="TEACHER">
-                          {t('auth.roles.teacher')} — {t('auth.roles.teacherDesc')}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <RoleSelector value={field.value} onChange={field.onChange} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

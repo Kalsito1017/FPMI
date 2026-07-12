@@ -27,6 +27,7 @@ model User {
   communityPosts    CommunityPost[]
   communityComments CommunityComment[]
   communityLikes    CommunityLike[]
+  contactMessages   ContactMessage[]
 }
 
 model CommunityPost {
@@ -95,4 +96,29 @@ model Announcement {
   sourceUrl   String?
   publishedAt DateTime
   createdAt   DateTime @default(now())
+}
+
+enum ContactMessageType {
+  SUGGESTION
+  FEATURE_REQUEST
+  BUG_REPORT
+  SPAM
+  OTHER
+}
+
+enum ContactMessageStatus {
+  OPEN
+  READ
+  RESOLVED
+}
+
+model ContactMessage {
+  id        Int                @id @default(autoincrement())
+  type      ContactMessageType
+  subject   String
+  message   String
+  userId    Int?
+  user      User?              @relation(fields: [userId], references: [id])
+  status    ContactMessageStatus @default(OPEN)
+  createdAt DateTime           @default(now())
 }

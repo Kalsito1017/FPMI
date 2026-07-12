@@ -16,6 +16,7 @@
     "community": "Community",
     "professors": "Professors",
     "faq": "FAQ",
+    "contact": "Contact",
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
@@ -75,7 +76,8 @@
       "teacher": "Teacher",
       "guestDesc": "Browse courses and read content",
       "studentDesc": "Contribute to wiki and join discussions",
-      "teacherDesc": "Create and manage course content"
+      "teacherDesc": "Create and manage course content",
+      "studentFeatures": "Post in forums, comment, like, contribute to wiki, review professors"
     }
   },
   "community": {
@@ -216,6 +218,10 @@
       "howContributeDev": {
         "q": "How can I contribute as a developer?",
         "a": "You can open an issue on GitHub or create a pull request (fork → branch → PR). CI checks lint, types, tests, and build. See CONTRIBUTING.md for local setup instructions."
+      },
+      "howBecomeModerator": {
+        "q": "How can I become a moderator?",
+        "a": "If you're an active member of the community and would like to help moderate content, you can reach out to the admin team directly through the platform's contact form, or send an email to the administrators. Your contributions and activity on the platform will be reviewed before granting moderator access."
       }
     }
   },
@@ -231,6 +237,23 @@
     "sourceLinkedin": "LinkedIn",
     "sourceUniversity": "University",
     "sourceManual": "Manual"
+  },
+  "contact": {
+    "title": "Contact & Support",
+    "description": "Send a suggestion, feature request, bug report, spam report, or other inquiry.",
+    "type": "Type",
+    "subject": "Subject",
+    "message": "Message",
+    "submit": "Send",
+    "thankYou": "Thank you!",
+    "thankYouDesc": "Your message was sent successfully. We'll get back to you if needed.",
+    "types": {
+      "SUGGESTION": "Suggestion",
+      "FEATURE_REQUEST": "Feature Request",
+      "BUG_REPORT": "Bug Report",
+      "SPAM": "Spam Report",
+      "OTHER": "Other"
+    }
   },
   "notFound": {
     "code": "404",
@@ -250,6 +273,7 @@
     "importExport": "Import/Export",
     "analytics": "Analytics",
     "announcements": "Announcements",
+    "contact": "Contact",
     "coursesPage": {
       "title": "Course management",
       "newCourse": "New course",
@@ -349,6 +373,18 @@
       "skipped": "Skipped",
       "errors": "Errors",
       "row": "Row"
+    },
+    "contactPage": {
+      "title": "Contact messages",
+      "listTitle": "All messages",
+      "typeCol": "Type",
+      "subjectCol": "Subject",
+      "fromCol": "From",
+      "statusCol": "Status",
+      "dateCol": "Date",
+      "actionsCol": "Actions",
+      "loading": "Loading…",
+      "empty": "No messages yet."
     },
     "announcementsPage": {
       "title": "Announcement management",
