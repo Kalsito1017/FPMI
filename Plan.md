@@ -161,11 +161,16 @@ PostgreSQL
 -   Courses
 -   Reviews
 
-## Course Forum
+## Communities (Forum)
 
--   Threads list (general course discussion)
--   Threads auto-linked from individual wiki pages' "Discuss" button
--   New thread / reply
+-   Global community forum for all registered users
+-   Posts with text and optional image URL
+-   Like/unlike posts
+-   Nested comments (top-level + replies)
+-   Create post (signed-in users only)
+-   Browse and read (public, no login required)
+
+## Course Forum
 
 ## Student Dashboard
 
@@ -247,7 +252,7 @@ solve versus plain Wikidot.
 -   name
 -   email
 -   passwordHash
--   role (`STUDENT` \| `MODERATOR` \| `ADMIN`)
+-   role (`GUEST` \| `STUDENT` \| `TEACHER` \| `MODERATOR` \| `ADMIN`)
 -   avatar
 -   createdAt
 
@@ -343,6 +348,34 @@ solve versus plain Wikidot.
 -   userId
 -   professorId
 
+## CommunityPost
+
+-   id
+-   title
+-   content
+-   imageUrl *(nullable)*
+-   authorId
+-   createdAt
+-   updatedAt
+
+## CommunityComment
+
+-   id
+-   content
+-   postId *(FK -> CommunityPost.id, cascade delete)*
+-   parentCommentId *(nullable, self-ref for replies)*
+-   authorId
+-   createdAt
+-   updatedAt
+
+## CommunityLike
+
+-   id
+-   postId *(FK -> CommunityPost.id, cascade delete)*
+-   userId
+-   createdAt
+-   *unique(postId, userId)*
+
 ## Announcement
 
 -   id
@@ -429,23 +462,33 @@ backend/
 ## Guest
 
 -   Browse content
--   Read wiki pages and forum threads
+-   Read wiki pages, forum threads, and community posts
 
 ## Student
 
+-   All Guest permissions
 -   Create new wiki pages (pending approval)
 -   Edit existing wiki pages (pending approval)
 -   Post in course/page forums
+-   Post in Communities forum
+-   Like and comment on community posts
 -   Bookmark resources
 -   Review professors
 -   Submit support tickets (suggestions, feature requests, bug reports,
     spam reports)
 
+## Teacher
+
+-   All Student permissions
+-   (Future: create and manage course content directly)
+
 ## Moderator
 
+-   All Teacher permissions
 -   Approve / reject page revisions
 -   Roll back pages to a previous revision
 -   Moderate forum threads/posts
+-   Moderate community posts/comments
 -   Moderate reviews
 -   Triage & resolve support tickets
 
@@ -521,6 +564,7 @@ under an assumption you didn't intend.
 -   Resources
 -   Search
 -   Professor profiles
+-   **Communities forum** — posts, likes, nested comments with text and image URLs
 
 ## Phase 3
 
@@ -541,3 +585,9 @@ under an assumption you didn't intend.
 -   OCR
 -   Quiz generation
 -   Analytics dashboard (most-edited pages, most active contributors)
+
+## Phase 5 (Future)
+
+-   Communities: file/image upload support (replace URL-paste with native upload)
+-   Community post moderation (report/flag inappropriate content)
+-   Rich text editor for community posts

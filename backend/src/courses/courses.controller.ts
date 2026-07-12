@@ -40,7 +40,7 @@ export class CoursesController {
     return this.coursesService.fetchTUSofiaSpecialties();
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Get('export/csv')
   async exportCsv(@Res() res: Response) {
     const csv = await this.coursesService.exportCsv();
@@ -55,13 +55,13 @@ export class CoursesController {
     return this.coursesService.findOne(slug);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Post()
   create(@Body() dto: CreateCourseDto) {
     return this.coursesService.create(dto);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Post('import/csv')
   @UseInterceptors(FileInterceptor('file'))
   async importCsv(@UploadedFile() file: Express.Multer.File) {
@@ -72,13 +72,13 @@ export class CoursesController {
     return this.coursesService.importCsv(csvContent);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateCourseDto) {
     return this.coursesService.update(id, dto);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @HttpCode(204)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {

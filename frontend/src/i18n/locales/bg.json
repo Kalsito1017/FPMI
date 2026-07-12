@@ -12,6 +12,8 @@
   "nav": {
     "home": "Начало",
     "courses": "Курсове",
+    "announcements": "Обяви",
+    "community": "Общност",
     "professors": "Преподаватели",
     "faq": "FAQ",
     "login": "Вход",
@@ -65,7 +67,61 @@
       "validEmail": "Въведете валиден имейл.",
       "passwordMin": "Паролата трябва да е поне 8 символа.",
       "nameRequired": "Името е задължително."
+    },
+    "roles": {
+      "label": "Аз съм",
+      "guest": "Гост",
+      "student": "Студент",
+      "teacher": "Преподавател",
+      "guestDesc": "Разглеждане на курсове и съдържание",
+      "studentDesc": "Допринасяне към wiki и дискусии",
+      "teacherDesc": "Създаване и управление на учебно съдържание"
     }
+  },
+  "community": {
+    "title": "Общност",
+    "subtitle": "Обсъждайте курсове, споделяйте ресурси и се свързвайте с колеги",
+    "newPost": "Нова публикация",
+    "createPost": "Създай публикация",
+    "editPost": "Редактирай",
+    "deletePost": "Изтрий",
+    "titleLabel": "Заглавие",
+    "contentLabel": "Съдържание",
+    "imageUrlLabel": "URL на изображение (по избор)",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "submit": "Публикувай",
+    "submitting": "Публикуване…",
+    "like": "Харесвам",
+    "unlike": "Отхаресвам",
+    "likes": "харесвания",
+    "comments": "коментара",
+    "comment": "Коментар",
+    "reply": "Отговори",
+    "cancelReply": "Отказ",
+    "writeComment": "Напиши коментар…",
+    "writeReply": "Напиши отговор…",
+    "noPosts": "Все още няма публикации.",
+    "noPostsDesc": "Бъдете първият, който започва дискусия!",
+    "loading": "Зареждане на публикации…",
+    "loadMore": "Зареди още",
+    "postCreated": "Публикацията е създадена.",
+    "postUpdated": "Публикацията е обновена.",
+    "postDeleted": "Публикацията е изтрита.",
+    "commentCreated": "Коментарът е добавен.",
+    "commentUpdated": "Коментарът е обновен.",
+    "commentDeleted": "Коментарът е изтрит.",
+    "errors": {
+      "createPost": "Публикацията не можа да се създаде.",
+      "updatePost": "Публикацията не можа да се обнови.",
+      "deletePost": "Публикацията не можа да се изтрие.",
+      "createComment": "Коментарът не можа да се добави.",
+      "updateComment": "Коментарът не можа да се обнови.",
+      "deleteComment": "Коментарът не можа да се изтрие.",
+      "likeFailed": "Харесването не можа да се обнови."
+    },
+    "deleteConfirm": "Сигурни ли сте, че искате да изтриете тази публикация?",
+    "loginToPost": "Влезте, за да създадете публикация",
+    "loginToComment": "Влезте, за да коментирате"
   },
   "courses": {
     "title": "Курсове",
@@ -163,6 +219,19 @@
       }
     }
   },
+  "announcements": {
+    "title": "Обяви",
+    "subtitle": "Последни новини и обяви от университета",
+    "loading": "Зареждане на обяви…",
+    "empty": "Все още няма обяви",
+    "emptyDesc": "Обявите ще се появят тук, когато бъдат добавени.",
+    "readMore": "Прочети повече",
+    "viewAll": "Виж всички обяви",
+    "sourceFacebook": "Facebook",
+    "sourceLinkedin": "LinkedIn",
+    "sourceUniversity": "Университет",
+    "sourceManual": "Ръчно добавена"
+  },
   "notFound": {
     "code": "404",
     "title": "Страницата не е намерена",
@@ -180,6 +249,7 @@
     "backToSite": "← Към сайта",
     "importExport": "Импорт/Експорт",
     "analytics": "Анализи",
+    "announcements": "Обяви",
     "coursesPage": {
       "title": "Управление на курсове",
       "newCourse": "Нов курс",
@@ -279,6 +349,29 @@
       "skipped": "Пропуснати",
       "errors": "Грешки",
       "row": "Ред"
+    },
+    "announcementsPage": {
+      "title": "Управление на обяви",
+      "listTitle": "Всички обяви",
+      "scrapeNow": " scrape сега",
+      "new": "Нова обява",
+      "newTitle": "Нова обява",
+      "newDesc": "Добавете нова обява ръчно.",
+      "titleCol": "Заглавие",
+      "sourceCol": "Източник",
+      "dateCol": "Дата",
+      "actionsCol": "Действия",
+      "titleLabel": "Заглавие",
+      "contentLabel": "Съдържание",
+      "sourceLabel": "Източник",
+      "sourceUrlLabel": "URL на източника",
+      "dateLabel": "Дата на публикуване",
+      "loading": "Зареждане…",
+      "empty": "Все още няма обяви.",
+      "created": "Обявата е създадена.",
+      "createError": "Обявата не можа да се създаде.",
+      "deleted": "Обявата е изтрита.",
+      "deleteError": "Обявата не можа да се изтрие."
     },
     "analytics": {
       "title": "Анализи",

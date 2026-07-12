@@ -1,4 +1,5 @@
-export type Role = 'STUDENT' | 'MODERATOR' | 'ADMIN'
+export type Role = 'GUEST' | 'STUDENT' | 'TEACHER' | 'MODERATOR' | 'ADMIN'
+export type AnnouncementSource = 'facebook' | 'linkedin' | 'university' | 'manual'
 
 export type CourseCategory =
   | 'Programming'
@@ -46,11 +47,22 @@ export interface RegisterInput {
   name: string
   email: string
   password: string
+  role?: string
 }
 
 export interface LoginInput {
   email: string
   password: string
+}
+
+export interface Announcement {
+  id: number
+  title: string
+  content?: string | null
+  source: AnnouncementSource
+  sourceUrl?: string | null
+  publishedAt: string
+  createdAt: string
 }
 
 export interface CreateCourseInput {
@@ -100,4 +112,57 @@ export const COURSE_CATEGORIES: CourseCategory[] = [
   'Cybersecurity',
 ]
 
-export const ROLES: Role[] = ['STUDENT', 'MODERATOR', 'ADMIN']
+export const ROLES: Role[] = ['GUEST', 'STUDENT', 'TEACHER', 'MODERATOR', 'ADMIN']
+
+export interface CommunityPost {
+  id: number
+  title: string
+  content: string
+  imageUrl?: string | null
+  authorId: number
+  author: { id: number; name: string; avatar?: string | null }
+  createdAt: string
+  updatedAt: string
+  _count: { comments: number; likes: number }
+  likedByMe?: boolean
+}
+
+export interface CommunityComment {
+  id: number
+  content: string
+  postId: number
+  parentCommentId?: number | null
+  authorId: number
+  author: { id: number; name: string; avatar?: string | null }
+  createdAt: string
+  updatedAt: string
+  replies?: CommunityComment[]
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    total: number
+    page: number
+    limit: number
+    totalPages: number
+  }
+}
+
+export interface CreatePostInput {
+  title: string
+  content: string
+  imageUrl?: string
+}
+
+export interface UpdatePostInput {
+  title?: string
+  content?: string
+  imageUrl?: string
+}
+
+export interface CreateCommentInput {
+  content: string
+  postId: number
+  parentCommentId?: number
+}

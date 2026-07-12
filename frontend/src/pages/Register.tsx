@@ -23,12 +23,20 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 function makeRegisterSchema(t: (key: string) => string) {
   return z.object({
     name: z.string().min(1, t('auth.errors.nameRequired')),
     email: z.string().email(t('auth.errors.validEmail')),
     password: z.string().min(8, t('auth.errors.passwordMin')),
+    role: z.string().optional(),
   })
 }
 
@@ -41,7 +49,7 @@ export function Register() {
 
   const form = useForm<RegisterValues>({
     resolver: zodResolver(makeRegisterSchema(t)),
-    defaultValues: { name: '', email: '', password: '' },
+    defaultValues: { name: '', email: '', password: '', role: 'GUEST' },
   })
 
   const onSubmit = async (values: RegisterValues) => {
@@ -100,6 +108,34 @@ export function Register() {
                     <FormControl>
                       <Input type="password" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('auth.roles.label')}</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="GUEST">
+                          {t('auth.roles.guest')} — {t('auth.roles.guestDesc')}
+                        </SelectItem>
+                        <SelectItem value="STUDENT">
+                          {t('auth.roles.student')} — {t('auth.roles.studentDesc')}
+                        </SelectItem>
+                        <SelectItem value="TEACHER">
+                          {t('auth.roles.teacher')} — {t('auth.roles.teacherDesc')}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

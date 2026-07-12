@@ -26,7 +26,7 @@ export class AuthService {
           name: dto.name,
           email: dto.email,
           passwordHash,
-          role: 'STUDENT',
+          role: (dto.role as any) ?? 'GUEST',
         },
       });
       const token = await this.jwtService.signAsync({ sub: user.id });

@@ -32,13 +32,13 @@ export class ProfessorsController {
     return this.professorsService.findOne(id);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Post()
   create(@Body() dto: CreateProfessorDto) {
     return this.professorsService.create(dto);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,7 +47,7 @@ export class ProfessorsController {
     return this.professorsService.update(id, dto);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @HttpCode(204)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {

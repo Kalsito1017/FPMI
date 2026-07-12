@@ -33,6 +33,9 @@ export function Navbar() {
       <NavLink to="/courses" className={navLinkClass} onClick={() => setMobileOpen(false)}>
         {t('nav.courses')}
       </NavLink>
+      <NavLink to="/announcements" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+        {t('nav.announcements')}
+      </NavLink>
       <NavLink to="/professors" className={navLinkClass} onClick={() => setMobileOpen(false)}>
         {t('nav.professors')}
       </NavLink>

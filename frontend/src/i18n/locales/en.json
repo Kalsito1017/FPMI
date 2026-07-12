@@ -12,6 +12,8 @@
   "nav": {
     "home": "Home",
     "courses": "Courses",
+    "announcements": "Announcements",
+    "community": "Community",
     "professors": "Professors",
     "faq": "FAQ",
     "login": "Login",
@@ -65,7 +67,62 @@
       "validEmail": "Please enter a valid email.",
       "passwordMin": "Password must be at least 8 characters.",
       "nameRequired": "Name is required."
+    },
+    "roles": {
+      "label": "I am a",
+      "guest": "Guest",
+      "student": "Student",
+      "teacher": "Teacher",
+      "guestDesc": "Browse courses and read content",
+      "studentDesc": "Contribute to wiki and join discussions",
+      "teacherDesc": "Create and manage course content"
     }
+  },
+  "community": {
+    "title": "Community",
+    "subtitle": "Discuss courses, share resources, and connect with fellow students",
+    "newPost": "New post",
+    "createPost": "Create post",
+    "editPost": "Edit post",
+    "deletePost": "Delete post",
+    "titleLabel": "Title",
+    "contentLabel": "Content",
+    "imageUrlLabel": "Image URL (optional)",
+    "imageUrlPlaceholder": "https://example.com/image.jpg",
+    "submit": "Publish",
+    "submitting": "Publishing…",
+    "like": "Like",
+    "unlike": "Unlike",
+    "likes": "likes",
+    "comments": "comments",
+    "comment": "Comment",
+    "reply": "Reply",
+    "cancelReply": "Cancel reply",
+    "writeComment": "Write a comment…",
+    "writeReply": "Write a reply…",
+    "noPosts": "No posts yet.",
+    "noPostsDesc": "Be the first to start a discussion!",
+    "loading": "Loading posts…",
+    "loadMore": "Load more",
+    "postCreated": "Post created.",
+    "postUpdated": "Post updated.",
+    "postDeleted": "Post deleted.",
+    "commentCreated": "Comment added.",
+    "commentUpdated": "Comment updated.",
+    "commentDeleted": "Comment deleted.",
+    "errors": {
+      "createPost": "Could not create post.",
+      "updatePost": "Could not update post.",
+      "deletePost": "Could not delete post.",
+      "createComment": "Could not add comment.",
+      "updateComment": "Could not update comment.",
+      "deleteComment": "Could not delete comment.",
+      "likeFailed": "Could not update like."
+    },
+    "deleteConfirm": "Are you sure you want to delete this post?",
+    "loginToPost": "Login to create a post",
+    "loginToComment": "Login to comment"
+  }
   },
   "courses": {
     "title": "Courses",
@@ -163,6 +220,19 @@
       }
     }
   },
+  "announcements": {
+    "title": "Announcements",
+    "subtitle": "Latest news and announcements from the university",
+    "loading": "Loading announcements…",
+    "empty": "No announcements yet",
+    "emptyDesc": "Announcements will appear here once added.",
+    "readMore": "Read more",
+    "viewAll": "View all announcements",
+    "sourceFacebook": "Facebook",
+    "sourceLinkedin": "LinkedIn",
+    "sourceUniversity": "University",
+    "sourceManual": "Manual"
+  },
   "notFound": {
     "code": "404",
     "title": "Page not found",
@@ -180,6 +250,7 @@
     "backToSite": "← Back to site",
     "importExport": "Import/Export",
     "analytics": "Analytics",
+    "announcements": "Announcements",
     "coursesPage": {
       "title": "Course management",
       "newCourse": "New course",
@@ -279,6 +350,29 @@
       "skipped": "Skipped",
       "errors": "Errors",
       "row": "Row"
+    },
+    "announcementsPage": {
+      "title": "Announcement management",
+      "listTitle": "All announcements",
+      "scrapeNow": "Scrape now",
+      "new": "New announcement",
+      "newTitle": "New announcement",
+      "newDesc": "Add a new announcement manually.",
+      "titleCol": "Title",
+      "sourceCol": "Source",
+      "dateCol": "Date",
+      "actionsCol": "Actions",
+      "titleLabel": "Title",
+      "contentLabel": "Content",
+      "sourceLabel": "Source",
+      "sourceUrlLabel": "Source URL",
+      "dateLabel": "Published date",
+      "loading": "Loading…",
+      "empty": "No announcements yet.",
+      "created": "Announcement created.",
+      "createError": "Announcement could not be created.",
+      "deleted": "Announcement deleted.",
+      "deleteError": "Announcement could not be deleted."
     },
     "analytics": {
       "title": "Analytics",

@@ -1,4 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsIn, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+
+const ALLOWED_REGISTER_ROLES = ['GUEST', 'STUDENT', 'TEACHER'] as const;
 
 export class RegisterDto {
   @IsString()
@@ -11,4 +13,9 @@ export class RegisterDto {
   @IsString()
   @MinLength(8)
   password: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(ALLOWED_REGISTER_ROLES)
+  role?: string;
 }

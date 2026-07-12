@@ -6,6 +6,7 @@ import { Home } from '@/pages/Home'
 import { Courses } from '@/pages/Courses'
 import { CoursePage } from '@/pages/CoursePage'
 import { Professors } from '@/pages/Professors'
+import { Announcements } from '@/pages/Announcements'
 import { FAQ } from '@/pages/FAQ'
 import { Login } from '@/pages/Login'
 import { Register } from '@/pages/Register'
@@ -14,6 +15,7 @@ import { AdminProfessors } from '@/pages/admin/AdminProfessors'
 import { AdminUsers } from '@/pages/admin/AdminUsers'
 import { AdminImportExport } from '@/pages/admin/AdminImportExport'
 import { AdminAnalytics } from '@/pages/admin/AdminAnalytics'
+import { AdminAnnouncements } from '@/pages/admin/AdminAnnouncements'
 import { NotFound } from '@/pages/NotFound'
 
 export function AppRoutes() {
@@ -25,6 +27,7 @@ export function AppRoutes() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:slug" element={<CoursePage />} />
           <Route path="/professors" element={<Professors />} />
+          <Route path="/announcements" element={<Announcements />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -42,6 +45,7 @@ export function AppRoutes() {
             <Route path="users" element={<AdminUsers />} />
             <Route path="import-export" element={<AdminImportExport />} />
             <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="announcements" element={<AdminAnnouncements />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

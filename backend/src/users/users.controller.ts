@@ -15,7 +15,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.MODERATOR)
   @Get()
   findAll() {
     return this.usersService.findAll();

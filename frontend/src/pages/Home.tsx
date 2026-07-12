@@ -1,8 +1,9 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Search, X, History, TrendingUp, ArrowDownAZ } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { Search, X, History, TrendingUp, ArrowDownAZ, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
+import { useAnnouncements } from '@/hooks/use-announcements'
 import { CourseCard } from '@/components/CourseCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -26,6 +27,7 @@ export function Home() {
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
   const { data: courses, isLoading } = useCourses()
+  const { data: latestAnnouncements } = useAnnouncements(3)
 
   const recentSearches = useSearchStore((s) => s.recentSearches)
   const visits = useSearchStore((s) => s.visits)
@@ -141,17 +143,53 @@ export function Home() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16">
-        <h2 className="mb-4 text-2xl font-semibold">{t('home.announcements')}</h2>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('home.noAnnouncements')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {t('home.noAnnouncementsDesc')}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">{t('home.announcements')}</h2>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/announcements">{t('announcements.readMore')}</Link>
+          </Button>
+        </div>
+        {!latestAnnouncements || latestAnnouncements.length === 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('home.noAnnouncements')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                {t('home.noAnnouncementsDesc')}
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {latestAnnouncements.map((a) => (
+              <Card key={a.id} className="flex flex-col">
+                <CardContent className="flex flex-1 flex-col pt-6">
+                  <div className="mb-1 text-xs text-muted-foreground">
+                    {new Date(a.publishedAt).toLocaleDateString()}
+                  </div>
+                  <h3 className="mb-1 font-semibold leading-tight">{a.title}</h3>
+                  {a.content && (
+                    <p className="mb-2 text-sm text-muted-foreground line-clamp-2 flex-1">
+                      {a.content}
+                    </p>
+                  )}
+                  {a.sourceUrl && (
+                    <a
+                      href={a.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                    >
+                      {t('announcements.readMore')}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   )

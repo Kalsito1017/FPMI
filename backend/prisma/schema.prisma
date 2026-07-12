@@ -8,7 +8,9 @@ datasource db {
 }
 
 enum Role {
+  GUEST
   STUDENT
+  TEACHER
   MODERATOR
   ADMIN
 }
@@ -18,9 +20,52 @@ model User {
   name         String
   email        String   @unique
   passwordHash String
-  role         Role     @default(STUDENT)
+  role         Role     @default(GUEST)
   avatar       String?
   createdAt    DateTime @default(now())
+
+  communityPosts    CommunityPost[]
+  communityComments CommunityComment[]
+  communityLikes    CommunityLike[]
+}
+
+model CommunityPost {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  imageUrl  String?
+  authorId  Int
+  author    User              @relation(fields: [authorId], references: [id])
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  comments CommunityComment[]
+  likes    CommunityLike[]
+}
+
+model CommunityComment {
+  id              Int              @id @default(autoincrement())
+  content         String
+  postId          Int
+  post            CommunityPost    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentCommentId Int?
+  parentComment   CommunityComment? @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies         CommunityComment[] @relation("CommentReplies")
+  authorId        Int
+  author          User             @relation(fields: [authorId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model CommunityLike {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
 }
 
 model Course {
@@ -40,4 +85,14 @@ model Professor {
   office String?
   bio    String?
   photo  String?
+}
+
+model Announcement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String?
+  source      String
+  sourceUrl   String?
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
 }
