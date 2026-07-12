@@ -12,7 +12,7 @@
   "nav": {
     "home": "Начало",
     "courses": "Курсове",
-    "announcements": "Обяви",
+    "announcements": "Новини",
     "community": "Общност",
     "professors": "Преподаватели",
     "faq": "FAQ",
@@ -29,9 +29,9 @@
     "popularCourses": "Популярни курсове",
     "loadingCourses": "Зареждане на курсове…",
     "noCourses": "Все още няма курсове.",
-    "announcements": "Обяви",
+    "announcements": "Новини",
     "noAnnouncements": "Все още няма обяви",
-    "noAnnouncementsDesc": "Обявите ще се появят тук в следваща фаза.",
+    "noAnnouncementsDesc": "Новините ще се появят тук в следваща фаза.",
     "recentSearches": "Скорошни търсения",
     "clear": "Изчисти",
     "mostVisited": "Най-посещавани",
@@ -220,11 +220,11 @@
     }
   },
   "announcements": {
-    "title": "Обяви",
+    "title": "Новини",
     "subtitle": "Последни новини и обяви от университета",
     "loading": "Зареждане на обяви…",
     "empty": "Все още няма обяви",
-    "emptyDesc": "Обявите ще се появят тук, когато бъдат добавени.",
+    "emptyDesc": "Новините ще се появят тук, когато бъдат добавени.",
     "readMore": "Прочети повече",
     "viewAll": "Виж всички обяви",
     "sourceFacebook": "Facebook",
@@ -249,7 +249,7 @@
     "backToSite": "← Към сайта",
     "importExport": "Импорт/Експорт",
     "analytics": "Анализи",
-    "announcements": "Обяви",
+    "announcements": "Новини",
     "coursesPage": {
       "title": "Управление на курсове",
       "newCourse": "Нов курс",
@@ -368,10 +368,10 @@
       "dateLabel": "Дата на публикуване",
       "loading": "Зареждане…",
       "empty": "Все още няма обяви.",
-      "created": "Обявата е създадена.",
-      "createError": "Обявата не можа да се създаде.",
-      "deleted": "Обявата е изтрита.",
-      "deleteError": "Обявата не можа да се изтрие."
+      "created": "Новината е създадена.",
+      "createError": "Новината не можа да се създаде.",
+      "deleted": "Новината е изтрита.",
+      "deleteError": "Новината не можа да се изтрие."
     },
     "analytics": {
       "title": "Анализи",

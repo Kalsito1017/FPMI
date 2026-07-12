@@ -1,4 +1,4 @@
-import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export const ANNOUNCEMENT_SOURCES = ['facebook', 'linkedin', 'university', 'manual'] as const;
 

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { AnnouncementsService } from './announcements.service';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -132,7 +133,7 @@ describe('AnnouncementsService', () => {
     });
 
     it('throws NotFoundException when not found', async () => {
-      const prismaError = new (require('@prisma/client').Prisma.PrismaClientKnownRequestError)(
+      const prismaError = new Prisma.PrismaClientKnownRequestError(
         'Record not found',
         { code: 'P2025', clientVersion: '6.0.0' },
       );
@@ -154,7 +155,7 @@ describe('AnnouncementsService', () => {
     });
 
     it('throws NotFoundException when not found', async () => {
-      const prismaError = new (require('@prisma/client').Prisma.PrismaClientKnownRequestError)(
+      const prismaError = new Prisma.PrismaClientKnownRequestError(
         'Record not found',
         { code: 'P2025', clientVersion: '6.0.0' },
       );
