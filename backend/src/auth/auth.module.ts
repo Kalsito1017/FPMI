@@ -10,9 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     PassportModule,
     JwtModule.register({
-      secret:
-        process.env.JWT_SECRET ??
-        'ucwYU+y7k0MYA/V7FPXvYJJqsENHL041Yu4VwnktlK6wbR9AU7WS4xgpXTpQHo+vB1kAU0DDFlDDjNEyQsrSew==',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
     EmailModule,

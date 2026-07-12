@@ -12,6 +12,7 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { CommunityModule } from './community/community.module';
 import { ContactModule } from './contact/contact.module';
 import { EmailModule } from './email/email.module';
+import { HealthModule } from './health/health.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/roles.guard';
 
@@ -29,6 +30,7 @@ import { RolesGuard } from './common/roles.guard';
     CommunityModule,
     ContactModule,
     EmailModule,
+    HealthModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

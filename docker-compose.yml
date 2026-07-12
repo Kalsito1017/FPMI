@@ -27,17 +27,20 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: "postgresql://fpmi:fpmi@db:5432/fpmi?schema=public"
-      JWT_SECRET: "ucwYU+y7k0MYA/V7FPXvYJJqsENHL041Yu4VwnktlK6wbR9AU7WS4xgpXTpQHo+vB1kAU0DDFlDDjNEyQsrSew=="
-      TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA"
-      CORS_ORIGIN: "http://localhost:5174"
-      PORT: "3000"
-      CHOKIDAR_USEPOLLING: "true"
+      JWT_SECRET: "${JWT_SECRET}"
+      TURNSTILE_SECRET_KEY: "${TURNSTILE_SECRET_KEY:-1x0000000000000000000000000000000AA}"
+      CORS_ORIGIN: "${CORS_ORIGIN:-http://localhost:5174}"
+      PORT: "${PORT:-3000}"
+      NODE_ENV: "production"
     ports:
-      - "3001:3000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-    command: sh -c "npx prisma migrate deploy && npm run prisma:seed && npm run start:dev"
+      - "${BACKEND_PORT:-3001}:3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    command: sh -c "npx prisma migrate deploy && node dist/main"
     restart: unless-stopped
 
   frontend:
@@ -46,11 +49,11 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_URL: "http://localhost:3001"
-      VITE_TURNSTILE_SITE_KEY: "1x00000000000000000000AA0000000000000000000"
+      VITE_API_URL: "${VITE_API_URL:-http://localhost:3001}"
+      VITE_TURNSTILE_SITE_KEY: "${VITE_TURNSTILE_SITE_KEY:-1x00000000000000000000AA0000000000000000000}"
       CHOKIDAR_USEPOLLING: "true"
     ports:
-      - "5174:5173"
+      - "${FRONTEND_PORT:-5174}:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules

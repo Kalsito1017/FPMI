@@ -11,6 +11,7 @@ import {
 import type { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
+import { Throttle } from '@nestjs/throttler';
 import { Public } from '../common/public.decorator';
 import { toSafeUser } from '../common/safe-user.util';
 import { RegisterDto } from './dto/register.dto';
@@ -32,6 +33,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('register')
   async register(
     @Body() dto: RegisterDto,
@@ -43,6 +45,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post('login')
   async login(
     @Body() dto: LoginDto,
