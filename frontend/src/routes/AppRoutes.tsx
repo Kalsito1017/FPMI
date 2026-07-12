@@ -1,12 +1,15 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { RootLayout } from '@/layouts/RootLayout'
 import { AdminLayout } from '@/layouts/AdminLayout'
-import { AdminRoute } from '@/routes/ProtectedRoute'
+import { AdminRoute, ProtectedRoute } from '@/routes/ProtectedRoute'
 import { Home } from '@/pages/Home'
 import { Courses } from '@/pages/Courses'
 import { CoursePage } from '@/pages/CoursePage'
 import { Professors } from '@/pages/Professors'
 import { Announcements } from '@/pages/Announcements'
+import { Communities } from '@/pages/community/Communities'
+import { CommunityPost } from '@/pages/community/CommunityPost'
+import { CreatePost } from '@/pages/community/CreatePost'
 import { FAQ } from '@/pages/FAQ'
 import { Login } from '@/pages/Login'
 import { Register } from '@/pages/Register'
@@ -28,6 +31,9 @@ export function AppRoutes() {
           <Route path="/courses/:slug" element={<CoursePage />} />
           <Route path="/professors" element={<Professors />} />
           <Route path="/announcements" element={<Announcements />} />
+          <Route path="/community" element={<Communities />} />
+          <Route path="/community/new" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+          <Route path="/community/:id" element={<CommunityPost />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
