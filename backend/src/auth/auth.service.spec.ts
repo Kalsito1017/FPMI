@@ -15,7 +15,15 @@ import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let prisma: { user: { create: jest.Mock; findUnique: jest.Mock } };
+  let prisma: {
+    user: { create: jest.Mock; findUnique: jest.Mock };
+    refreshToken: {
+      create: jest.Mock;
+      findUnique: jest.Mock;
+      delete: jest.Mock;
+      deleteMany: jest.Mock;
+    };
+  };
   let jwtService: { signAsync: jest.Mock };
 
   const mockUser = {
@@ -33,6 +41,12 @@ describe('AuthService', () => {
       user: {
         create: jest.fn(),
         findUnique: jest.fn(),
+      },
+      refreshToken: {
+        create: jest.fn().mockResolvedValue({}),
+        findUnique: jest.fn(),
+        delete: jest.fn(),
+        deleteMany: jest.fn(),
       },
     };
     jwtService = { signAsync: jest.fn() };
@@ -64,7 +78,8 @@ describe('AuthService', () => {
         password: 'password123',
       });
 
-      expect(result.token).toBe('token');
+      expect(result.accessToken).toBe('token');
+      expect(result.refreshToken).toBeDefined();
       expect(result.user).toEqual({
         id: 1,
         name: 'Test User',
@@ -103,7 +118,8 @@ describe('AuthService', () => {
         password: 'password123',
       });
 
-      expect(result.token).toBe('token');
+      expect(result.accessToken).toBe('token');
+      expect(result.refreshToken).toBeDefined();
       expect(result.user).toEqual({
         id: 1,
         name: 'Test User',

@@ -3,13 +3,15 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import type { Request } from 'express';
 import { PrismaService } from '../prisma/prisma.service';
+import { toSafeUser } from '../common/safe-user.util';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private prisma: PrismaService) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: Request) => (req?.cookies?.token as string | undefined) ?? null,
+        (req: Request) =>
+          (req?.cookies?.access_token as string | undefined) ?? null,
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
       ignoreExpiration: false,
@@ -24,6 +26,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       return null;
     }
-    return user;
+    return toSafeUser(user);
   }
 }

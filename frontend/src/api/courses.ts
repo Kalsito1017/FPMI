@@ -3,14 +3,21 @@ import type {
   Course,
   CourseCategory,
   CreateCourseInput,
+  PaginatedResponse,
   UpdateCourseInput,
 } from '@/types'
 
 export async function listCourses(
   category?: CourseCategory,
-): Promise<Course[]> {
-  const res = await apiClient.get<Course[]>('/courses', {
-    params: category ? { category } : undefined,
+  page?: number,
+  limit?: number,
+): Promise<PaginatedResponse<Course>> {
+  const res = await apiClient.get<PaginatedResponse<Course>>('/courses', {
+    params: {
+      ...(category && { category }),
+      ...(page && { page }),
+      ...(limit && { limit }),
+    },
   })
   return res.data
 }

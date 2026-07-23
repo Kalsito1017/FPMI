@@ -1,0 +1,189 @@
+name: fpmi-hub-prod
+
+services:
+  db:
+    image: postgres:16
+    container_name: fpmi-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fpmi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-fpmi}
+    volumes:
+      - fpmi-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fpmi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - internal
+
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: fpmi-pgbouncer
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-fpmi}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-fpmi}"
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 200
+      DEFAULT_POOL_SIZE: 25
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - internal
+
+  redis:
+    image: redis:7-alpine
+    container_name: fpmi-redis
+    volumes:
+      - fpmi-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - internal
+
+  migrator:
+    image: ghcr.io/${GITHUB_REPOSITORY:-owner/fpmi-hub}/backend:latest
+    depends_on:
+      pgbouncer:
+        condition: service_started
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-fpmi}:${POSTGRES_PASSWORD}@pgbouncer:6432/${POSTGRES_DB:-fpmi}?pgbouncer=true&connection_limit=10"
+      NODE_ENV: "production"
+    command: ["npx", "prisma", "migrate", "deploy"]
+    restart: "no"
+    networks:
+      - internal
+
+  backend:
+    image: ghcr.io/${GITHUB_REPOSITORY:-owner/fpmi-hub}/backend:latest
+    depends_on:
+      migrator:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-fpmi}:${POSTGRES_PASSWORD}@pgbouncer:6432/${POSTGRES_DB:-fpmi}?pgbouncer=true&connection_limit=10"
+      REDIS_URL: "redis://redis:6379"
+      JWT_SECRET: ${JWT_SECRET}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://fpmi.bg}
+      PORT: "3000"
+      NODE_ENV: "production"
+      SECURE_COOKIES: "true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`${API_DOMAIN:-api.fpmi.bg}`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: always
+    deploy:
+      replicas: 2
+    resources:
+      limits:
+        cpus: "0.5"
+        memory: "256M"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - internal
+      - web
+
+  frontend:
+    image: ghcr.io/${GITHUB_REPOSITORY:-owner/fpmi-hub}/frontend:latest
+    depends_on:
+      - backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`${FRONTEND_DOMAIN:-fpmi.bg}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    resources:
+      limits:
+        cpus: "0.25"
+        memory: "128M"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - web
+
+  traefik:
+    image: traefik:v3
+    container_name: fpmi-traefik
+    command:
+      - "--api.dashboard=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@fpmi.bg}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-letsencrypt:/letsencrypt
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - web
+
+volumes:
+  fpmi-pgdata:
+  fpmi-redis-data:
+  traefik-letsencrypt:
+
+networks:
+  internal:
+    driver: bridge
+  web:
+    driver: bridge

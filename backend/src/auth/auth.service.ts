@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { Prisma, Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
@@ -27,6 +28,10 @@ export class AuthService {
     private emailService: EmailService,
   ) {}
 
+  private hashToken(token: string): string {
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+
   private async verifyTurnstile(token?: string): Promise<boolean> {
     const secret = process.env.TURNSTILE_SECRET_KEY;
     if (!secret) return true;
@@ -42,6 +47,19 @@ export class AuthService {
     );
     const body = (await res.json()) as { success: boolean };
     return body.success;
+  }
+
+  private async generateAccessToken(userId: number): Promise<string> {
+    return this.jwtService.signAsync({ sub: userId });
+  }
+
+  private async generateRefreshToken(userId: number): Promise<string> {
+    const rawToken = crypto.randomBytes(48).toString('hex');
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await this.prisma.refreshToken.create({
+      data: { token: this.hashToken(rawToken), userId, expiresAt },
+    });
+    return rawToken;
   }
 
   async register(dto: RegisterDto) {
@@ -60,15 +78,16 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           name: dto.name,
-          email: dto.email,
+          email: dto.email.toLowerCase(),
           passwordHash,
           role,
           specialty: dto.specialty ?? null,
           hobbies: dto.hobbies ?? null,
         },
       });
-      const token = await this.jwtService.signAsync({ sub: user.id });
-      return { user: toSafeUser(user), token };
+      const accessToken = await this.generateAccessToken(user.id);
+      const refreshToken = await this.generateRefreshToken(user.id);
+      return { user: toSafeUser(user), accessToken, refreshToken };
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
@@ -81,7 +100,7 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
+      where: { email: dto.email.toLowerCase() },
     });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -90,29 +109,54 @@ export class AuthService {
     if (!valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const token = await this.jwtService.signAsync({ sub: user.id });
-    return { user: toSafeUser(user), token };
+    const accessToken = await this.generateAccessToken(user.id);
+    const refreshToken = await this.generateRefreshToken(user.id);
+    return { user: toSafeUser(user), accessToken, refreshToken };
+  }
+
+  async refreshAccessToken(refreshTokenStr: string) {
+    const tokenHash = this.hashToken(refreshTokenStr);
+    const record = await this.prisma.refreshToken.findUnique({
+      where: { token: tokenHash },
+    });
+    if (!record || record.expiresAt < new Date()) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+    const deleted = await this.prisma.refreshToken.deleteMany({
+      where: { token: tokenHash, expiresAt: { gt: new Date() } },
+    });
+    if (deleted.count === 0) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+    const accessToken = await this.generateAccessToken(record.userId);
+    const refreshToken = await this.generateRefreshToken(record.userId);
+    return { accessToken, refreshToken };
+  }
+
+  async revokeRefreshToken(refreshTokenStr: string) {
+    await this.prisma.refreshToken.deleteMany({
+      where: { token: this.hashToken(refreshTokenStr) },
+    });
+  }
+
+  async revokeAllUserRefreshTokens(userId: number) {
+    await this.prisma.refreshToken.deleteMany({ where: { userId } });
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
+    const email = dto.email.toLowerCase();
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
+      where: { email },
     });
 
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-
     if (user) {
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
       await this.prisma.passwordResetToken.create({
-        data: {
-          email: dto.email,
-          token,
-          expiresAt,
-        },
+        data: { email, token: this.hashToken(rawToken), expiresAt },
       });
+      await this.emailService.sendPasswordResetEmail(email, rawToken);
     }
-
-    await this.emailService.sendPasswordResetEmail(dto.email, token);
 
     return {
       message: 'If that email is registered, a reset link has been sent.',
@@ -120,33 +164,35 @@ export class AuthService {
   }
 
   async resetPassword(dto: ResetPasswordDto) {
-    const record = await this.prisma.passwordResetToken.findUnique({
-      where: { token: dto.token },
+    const tokenHash = this.hashToken(dto.token);
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.passwordResetToken.updateMany({
+        where: { token: tokenHash, used: false, expiresAt: { gt: new Date() } },
+        data: { used: true },
+      });
+      if (updated.count === 0) {
+        throw new BadRequestException('Invalid or expired reset token');
+      }
+      const record = await tx.passwordResetToken.findUnique({
+        where: { token: tokenHash },
+      });
+      if (!record) {
+        throw new BadRequestException('Invalid or expired reset token');
+      }
+      const user = await tx.user.findUnique({
+        where: { email: record.email },
+      });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      const passwordHash = await bcrypt.hash(dto.password, 10);
+      await tx.user.update({
+        where: { id: user.id },
+        data: { passwordHash },
+      });
+      await tx.refreshToken.deleteMany({ where: { userId: user.id } });
+      return { message: 'Password reset successfully' };
     });
-
-    if (!record || record.used || record.expiresAt < new Date()) {
-      throw new BadRequestException('Invalid or expired reset token');
-    }
-
-    const user = await this.prisma.user.findUnique({
-      where: { email: record.email },
-    });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const passwordHash = await bcrypt.hash(dto.password, 10);
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { passwordHash },
-    });
-
-    await this.prisma.passwordResetToken.update({
-      where: { id: record.id },
-      data: { used: true },
-    });
-
-    return { message: 'Password reset successfully' };
   }
 
   async changePassword(userId: number, dto: ChangePasswordDto) {
@@ -163,10 +209,13 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(dto.newPassword, 10);
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { passwordHash },
-    });
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash },
+      }),
+      this.prisma.refreshToken.deleteMany({ where: { userId } }),
+    ]);
 
     return { message: 'Password changed successfully' };
   }
@@ -208,7 +257,42 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    await this.prisma.user.delete({ where: { id: userId } });
+    await this.prisma.$transaction([
+      this.prisma.refreshToken.deleteMany({ where: { userId } }),
+      this.prisma.communityLike.deleteMany({ where: { userId } }),
+      this.prisma.contactMessage.updateMany({
+        where: { userId },
+        data: { userId: null },
+      }),
+      this.prisma.communityComment.updateMany({
+        where: { authorId: userId },
+        data: { content: '[deleted]' },
+      }),
+      this.prisma.communityPost.updateMany({
+        where: { authorId: userId },
+        data: { content: '[deleted]', title: '[deleted]' },
+      }),
+      this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          name: 'Deleted User',
+          email: `deleted+${userId}@fpmi.bg`,
+          passwordHash: crypto.randomBytes(32).toString('hex'),
+          specialty: null,
+          hobbies: null,
+          avatar: null,
+        },
+      }),
+    ]);
     return { message: 'Account deleted' };
+  }
+
+  @Cron(CronExpression.EVERY_HOUR)
+  async cleanupExpiredTokens() {
+    await this.prisma.passwordResetToken.deleteMany({
+      where: {
+        OR: [{ used: true }, { expiresAt: { lt: new Date() } }],
+      },
+    });
   }
 }

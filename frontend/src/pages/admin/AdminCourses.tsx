@@ -122,7 +122,8 @@ type UpdateCoursePayload = Omit<CreateCoursePayload, 'slug'>
 
 export function AdminCourses() {
   const { t } = useTranslation()
-  const { data: courses, isLoading } = useCourses()
+  const { data: coursesPage, isLoading } = useCourses(undefined, 1, 100)
+  const courses = coursesPage?.data ?? []
   const createCourse = useCreateCourse()
   const updateCourse = useUpdateCourse()
   const deleteCourse = useDeleteCourse()
@@ -185,14 +186,14 @@ export function AdminCourses() {
                   {t('admin.coursesPage.loading')}
                 </TableCell>
               </TableRow>
-            ) : (courses ?? []).length === 0 ? (
+            ) : courses.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-muted-foreground">
                   {t('admin.coursesPage.noCourses')}
                 </TableCell>
               </TableRow>
             ) : (
-              courses!.map((course) => (
+              courses.map((course) => (
                 <TableRow key={course.id}>
                   <TableCell className="font-medium">{course.title}</TableCell>
                   <TableCell className="text-muted-foreground">

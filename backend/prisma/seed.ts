@@ -1,22 +1,33 @@
 import { PrismaClient, Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+
+if (process.env.NODE_ENV === 'production') {
+  console.error('Seed should not be run in production. Aborting.');
+  process.exit(1);
+}
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminHash = await bcrypt.hash('yAi0iPnHM9SEjBZ2ZVAXRW/U3oydhLUc4WT0TM1ZJPE=', 10);
+  const adminPassword = crypto.randomBytes(16).toString('hex');
+  const adminHash = await bcrypt.hash(adminPassword, 10);
   const studentHash = await bcrypt.hash('student123', 10);
 
+  const adminEmail = process.env.ADMIN_EMAIL ?? 'admin@example.com';
+
   await prisma.user.upsert({
-    where: { email: 'fpmiadmin45@proton.me' },
+    where: { email: adminEmail },
     update: {},
     create: {
       name: 'Admin User',
-      email: 'fpmiadmin45@proton.me',
+      email: adminEmail,
       passwordHash: adminHash,
       role: Role.ADMIN,
     },
   });
+  console.log(`Admin user created with email: ${adminEmail}`);
+  console.log(`Admin random password (change immediately): ${adminPassword}`);
 
   await prisma.user.upsert({
     where: { email: 'student@fpmi.bg' },

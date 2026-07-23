@@ -14,10 +14,10 @@ import type {
   UpdateCourseInput,
 } from '@/types'
 
-export function useCourses(category?: CourseCategory) {
+export function useCourses(category?: CourseCategory, page?: number, limit?: number) {
   return useQuery({
-    queryKey: ['courses', category],
-    queryFn: () => listCourses(category),
+    queryKey: ['courses', category, page, limit],
+    queryFn: () => listCourses(category, page, limit),
   })
 }
 

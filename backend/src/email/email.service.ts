@@ -20,9 +20,7 @@ export class EmailService {
     }/reset-password?token=${token}`;
 
     if (!this.resend) {
-      console.log(
-        `[EmailService] Dev mode — reset link for ${to}: ${resetUrl}`,
-      );
+      console.log(`[EmailService] Dev mode — reset email triggered for ${to}`);
       return;
     }
 

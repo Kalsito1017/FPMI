@@ -95,7 +95,7 @@ interface Professor {
 
 | Method   | Path            | Auth      | Body / Query                          | Response 200 / 204                  |
 |----------|-----------------|-----------|---------------------------------------|--------------------------------------|
-| GET      | `/courses`      | none      | `?category=<CourseCategory>` (opt.)   | `Course[]` (filter by category)      |
+| GET      | `/courses`      | none      | `?page=1&limit=20&category=<CourseCategory>` (all opt.) | `{ data: Course[], meta: { total, page, limit, totalPages } }` |
 | GET      | `/courses/:slug`| none      | —                                     | `Course` (404 if not found)          |
 | POST     | `/courses`      | `[ADMIN]` | `Course` (without `id`)               | `Course` (201)                       |
 | PATCH    | `/courses/:id`  | `[ADMIN]` | Partial `Course` (without `id`/`slug`)| `Course`                             |

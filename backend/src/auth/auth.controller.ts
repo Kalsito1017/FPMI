@@ -7,13 +7,14 @@ import {
   Post,
   Req,
   Res,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
-import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { Throttle } from '@nestjs/throttler';
 import { Public } from '../common/public.decorator';
-import { toSafeUser } from '../common/safe-user.util';
+import { SafeUser } from '../common/safe-user.util';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -21,55 +22,96 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 
-const COOKIE_OPTIONS = {
+const ACCESS_COOKIE_OPTIONS = {
   httpOnly: true,
   sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
+  secure: process.env.SECURE_COOKIES === 'true',
   path: '/',
 };
 
+const REFRESH_COOKIE_OPTIONS = {
+  ...ACCESS_COOKIE_OPTIONS,
+  path: '/auth/refresh',
+};
+
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Throttle({ long: { limit: 5, ttl: 60000 } })
   @Post('register')
+  @ApiOperation({ summary: 'Register a new user' })
   async register(
     @Body() dto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.register(dto);
-    res.cookie('token', result.token, COOKIE_OPTIONS);
-    return { user: result.user, token: result.token };
+    res.cookie('access_token', result.accessToken, ACCESS_COOKIE_OPTIONS);
+    res.cookie('refresh_token', result.refreshToken, REFRESH_COOKIE_OPTIONS);
+    return { user: result.user };
   }
 
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Throttle({ long: { limit: 5, ttl: 60000 } })
   @Post('login')
+  @ApiOperation({ summary: 'Login' })
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(dto);
-    res.cookie('token', result.token, COOKIE_OPTIONS);
-    return { user: result.user, token: result.token };
+    res.cookie('access_token', result.accessToken, ACCESS_COOKIE_OPTIONS);
+    res.cookie('refresh_token', result.refreshToken, REFRESH_COOKIE_OPTIONS);
+    return { user: result.user };
+  }
+  @Public()
+  @Throttle({ long: { limit: 10, ttl: 60000 } })
+  @Post('refresh')
+  @ApiOperation({ summary: 'Refresh access token' })
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const cookies = req.cookies as Record<string, string> | undefined;
+    const tokenStr = cookies?.refresh_token;
+    if (!tokenStr) {
+      throw new UnauthorizedException('Refresh token is required');
+    }
+    const result = await this.authService.refreshAccessToken(tokenStr);
+    res.cookie('access_token', result.accessToken, ACCESS_COOKIE_OPTIONS);
+    res.cookie('refresh_token', result.refreshToken, REFRESH_COOKIE_OPTIONS);
+    return { message: 'Token refreshed' };
   }
 
+  @ApiBearerAuth()
   @Post('logout')
-  logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('token', { path: '/' });
+  @ApiOperation({ summary: 'Logout' })
+  async logout(
+    @Req() req: Request & { user?: SafeUser },
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (req.user?.id) {
+      await this.authService.revokeAllUserRefreshTokens(req.user.id);
+    }
+    res.clearCookie('access_token', { path: '/' });
+    res.clearCookie('refresh_token', { path: '/auth/refresh' });
     return { message: 'Logged out' };
   }
 
+  @ApiBearerAuth()
   @Get('me')
-  me(@Req() req: Request & { user: User }) {
-    return { user: toSafeUser(req.user) };
+  @ApiOperation({ summary: 'Get current user profile' })
+  me(@Req() req: Request & { user: SafeUser }) {
+    return { user: req.user };
   }
 
+  @ApiBearerAuth()
   @Patch('me')
+  @ApiOperation({ summary: 'Update current user profile' })
   updateProfile(
-    @Req() req: Request & { user: User },
+    @Req() req: Request & { user: SafeUser },
     @Body() dto: UpdateProfileDto,
   ) {
     return this.authService.updateProfile(req.user.id, dto);
@@ -77,31 +119,39 @@ export class AuthController {
 
   @Public()
   @Post('forgot-password')
+  @ApiOperation({ summary: 'Request password reset' })
   forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
   @Public()
   @Post('reset-password')
+  @ApiOperation({ summary: 'Reset password with token' })
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto);
   }
 
+  @ApiBearerAuth()
   @Post('change-password')
+  @ApiOperation({ summary: 'Change password' })
   changePassword(
-    @Req() req: Request & { user: User },
+    @Req() req: Request & { user: SafeUser },
     @Body() dto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(req.user.id, dto);
   }
 
+  @ApiBearerAuth()
   @Get('export-data')
-  exportData(@Req() req: Request & { user: User }) {
+  @ApiOperation({ summary: 'Export user data' })
+  exportData(@Req() req: Request & { user: SafeUser }) {
     return this.authService.exportData(req.user.id);
   }
 
+  @ApiBearerAuth()
   @Delete('account')
-  deleteAccount(@Req() req: Request & { user: User }) {
+  @ApiOperation({ summary: 'Delete account' })
+  deleteAccount(@Req() req: Request & { user: SafeUser }) {
     return this.authService.deleteAccount(req.user.id);
   }
 }

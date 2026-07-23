@@ -27,7 +27,7 @@ export function Home() {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [focused, setFocused] = useState(false)
-  const { data: courses, isLoading, isError: coursesError } = useCourses()
+  const { data: coursesPage, isLoading, isError: coursesError } = useCourses(undefined, 1, 100)
   const { data: latestAnnouncements, isError: annError } = useAnnouncements(3)
 
   const recentSearches = useSearchStore((s) => s.recentSearches)
@@ -41,16 +41,17 @@ export function Home() {
     [visits],
   )
 
+  const courses = useMemo(() => coursesPage?.data ?? [], [coursesPage])
+
   const matchingCourses = useMemo(
-    () => filterCourses(courses ?? [], query),
+    () => filterCourses(courses, query),
     [courses, query],
   )
 
   const suggestions = useMemo<Course[] | null>(() => {
     if (query.trim()) return null
-    const all = courses ?? []
-    if (hasVisits) return selectMostVisited(all, visits, 6)
-    return selectAlphabetical(all, 6)
+    if (hasVisits) return selectMostVisited(courses, visits, 6)
+    return selectAlphabetical(courses, 6)
   }, [courses, hasVisits, visits, query])
 
   const showDropdown = focused
@@ -74,7 +75,7 @@ export function Home() {
     navigate(`/courses/${slug}`)
   }
 
-  const popular = (courses ?? []).slice(0, 6)
+  const popular = courses.slice(0, 6)
 
   return (
     <div>

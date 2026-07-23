@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 
 const COOKIE_CONSENT_KEY = 'fpmi-cookie-consent'
 
+function getInitialDismissed(): boolean {
+  if (typeof window === 'undefined') return true
+  return localStorage.getItem(COOKIE_CONSENT_KEY) === 'true'
+}
+
 export function CookieBanner() {
   const { t } = useTranslation()
-  const [dismissed, setDismissed] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY)
-    if (!stored) setDismissed(false)
-  }, [])
+  const [dismissed, setDismissed] = useState(getInitialDismissed)
 
   if (dismissed) return null
 

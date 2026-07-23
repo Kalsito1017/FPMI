@@ -30,6 +30,18 @@ model User {
   communityComments CommunityComment[]
   communityLikes    CommunityLike[]
   contactMessages   ContactMessage[]
+  refreshTokens     RefreshToken[]
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model CommunityPost {
@@ -44,6 +56,9 @@ model CommunityPost {
 
   comments CommunityComment[]
   likes    CommunityLike[]
+
+  @@index([authorId])
+  @@index([createdAt])
 }
 
 model CommunityComment {
@@ -58,6 +73,10 @@ model CommunityComment {
   author          User             @relation(fields: [authorId], references: [id])
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentCommentId])
 }
 
 model CommunityLike {
@@ -69,6 +88,8 @@ model CommunityLike {
   createdAt DateTime @default(now())
 
   @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
 }
 
 model Course {
@@ -97,6 +118,10 @@ model PasswordResetToken {
   expiresAt DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([used])
+  @@index([expiresAt])
 }
 
 model Announcement {
@@ -107,6 +132,8 @@ model Announcement {
   sourceUrl   String?
   publishedAt DateTime
   createdAt   DateTime @default(now())
+
+  @@index([publishedAt])
 }
 
 enum ContactMessageType {
@@ -132,4 +159,7 @@ model ContactMessage {
   user      User?              @relation(fields: [userId], references: [id])
   status    ContactMessageStatus @default(OPEN)
   createdAt DateTime           @default(now())
+
+  @@index([status])
+  @@index([userId])
 }

@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
 import { CourseCard } from '@/components/CourseCard'
@@ -9,24 +10,19 @@ import { cn } from '@/lib/utils'
 
 export function Courses() {
   const { t } = useTranslation()
-  const { data: courses, isLoading, isError } = useCourses()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Number(searchParams.get('page')) || 1
   const [active, setActive] = useState<CourseCategory | 'All'>('All')
 
-  const grouped = useMemo(() => {
-    const map = new Map<CourseCategory, typeof courses>()
-    for (const category of COURSE_CATEGORIES) {
-      map.set(category, [])
-    }
-    for (const course of courses ?? []) {
-      map.get(course.category)?.push(course)
-    }
-    return map
-  }, [courses])
+  const category = active === 'All' ? undefined : active
+  const { data, isLoading, isError } = useCourses(category, page)
 
-  const visibleCategories =
-    active === 'All'
-      ? COURSE_CATEGORIES.filter((c) => (grouped.get(c) ?? []).length > 0)
-      : [active]
+  const courses = data?.data ?? []
+
+  const handleCategoryChange = (next: CourseCategory | 'All') => {
+    setActive(next)
+    setSearchParams(next === 'All' ? {} : { category: next })
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -38,14 +34,14 @@ export function Courses() {
         <FilterButton
           label={t('courses.all')}
           active={active === 'All'}
-          onClick={() => setActive('All')}
+          onClick={() => handleCategoryChange('All')}
         />
         {COURSE_CATEGORIES.map((category) => (
           <FilterButton
             key={category}
             label={category}
             active={active === category}
-            onClick={() => setActive(category)}
+            onClick={() => handleCategoryChange(category)}
           />
         ))}
       </div>
@@ -59,23 +55,52 @@ export function Courses() {
             {t('common.retry')}
           </Button>
         </div>
-      ) : visibleCategories.length === 0 ? (
+      ) : courses.length === 0 ? (
         <p className="text-muted-foreground">
           {t('courses.noCoursesInCategory')}
         </p>
       ) : (
-        <div className="space-y-10">
-          {visibleCategories.map((category) => (
-            <section key={category}>
-              <h2 className="mb-4 text-xl font-semibold">{category}</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {(grouped.get(category) ?? []).map((course) => (
-                  <CourseCard key={course.id} course={course} />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+
+          {data?.meta && data.meta.totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page <= 1}
+                onClick={() =>
+                  setSearchParams({
+                    ...(category && { category }),
+                    page: String(page - 1),
+                  })
+                }
+              >
+                &laquo; {t('common.previous', 'Previous')}
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                {page} / {data.meta.totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= data.meta.totalPages}
+                onClick={() =>
+                  setSearchParams({
+                    ...(category && { category }),
+                    page: String(page + 1),
+                  })
+                }
+              >
+                {t('common.next', 'Next')} &raquo;
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

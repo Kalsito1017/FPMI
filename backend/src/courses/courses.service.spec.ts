@@ -8,6 +8,7 @@ describe('CoursesService', () => {
   let prisma: {
     course: {
       findMany: jest.Mock;
+      count: jest.Mock;
       findUnique: jest.Mock;
       create: jest.Mock;
       update: jest.Mock;
@@ -29,6 +30,7 @@ describe('CoursesService', () => {
     prisma = {
       course: {
         findMany: jest.fn(),
+        count: jest.fn().mockResolvedValue(1),
         findUnique: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
@@ -44,24 +46,61 @@ describe('CoursesService', () => {
   });
 
   describe('findAll', () => {
-    it('returns all courses when no category filter', async () => {
+    it('returns paginated courses when no category filter', async () => {
       prisma.course.findMany.mockResolvedValue([mockCourse]);
+      prisma.course.count.mockResolvedValue(1);
 
-      const result = await service.findAll();
+      const result = await service.findAll({});
 
-      expect(prisma.course.findMany).toHaveBeenCalledWith();
-      expect(result).toEqual([mockCourse]);
+      expect(prisma.course.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 20,
+        where: undefined,
+        orderBy: { id: 'asc' },
+      });
+      expect(prisma.course.count).toHaveBeenCalledWith({ where: undefined });
+      expect(result).toEqual({
+        data: [mockCourse],
+        meta: { total: 1, page: 1, limit: 20, totalPages: 1 },
+      });
     });
 
     it('filters by category when provided', async () => {
       prisma.course.findMany.mockResolvedValue([mockCourse]);
+      prisma.course.count.mockResolvedValue(1);
 
-      const result = await service.findAll('Programming');
+      const result = await service.findAll({ category: 'Programming' });
 
       expect(prisma.course.findMany).toHaveBeenCalledWith({
+        skip: 0,
+        take: 20,
+        where: { category: 'Programming' },
+        orderBy: { id: 'asc' },
+      });
+      expect(prisma.course.count).toHaveBeenCalledWith({
         where: { category: 'Programming' },
       });
-      expect(result).toEqual([mockCourse]);
+      expect(result.meta.total).toBe(1);
+    });
+
+    it('applies skip and take for page 2', async () => {
+      prisma.course.findMany.mockResolvedValue([]);
+      prisma.course.count.mockResolvedValue(30);
+
+      const result = await service.findAll({ page: 2, limit: 20 });
+
+      expect(prisma.course.findMany).toHaveBeenCalledWith({
+        skip: 20,
+        take: 20,
+        where: undefined,
+        orderBy: { id: 'asc' },
+      });
+      expect(result.meta).toEqual({
+        total: 30,
+        page: 2,
+        limit: 20,
+        totalPages: 2,
+      });
     });
   });
 

@@ -9,6 +9,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { QueryCoursesDto } from './dto/query-courses.dto';
 import { parse } from 'csv-parse/sync';
 import { COURSE_CATEGORIES } from './dto/create-course.dto';
 
@@ -23,11 +24,26 @@ export interface TUSofiaSpecialty {
 export class CoursesService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(category?: string) {
-    if (category) {
-      return this.prisma.course.findMany({ where: { category } });
-    }
-    return this.prisma.course.findMany();
+  async findAll(query: QueryCoursesDto) {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const skip = (page - 1) * limit;
+    const where = query.category ? { category: query.category } : undefined;
+
+    const [courses, total] = await Promise.all([
+      this.prisma.course.findMany({
+        skip,
+        take: limit,
+        where,
+        orderBy: { id: 'asc' },
+      }),
+      this.prisma.course.count({ where }),
+    ]);
+
+    return {
+      data: courses,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findOne(slug: string) {
@@ -84,6 +100,7 @@ export class CoursesService {
   async exportCsv(): Promise<string> {
     const courses = await this.prisma.course.findMany({
       orderBy: { id: 'asc' },
+      take: 10000,
     });
     const headers = [
       'title',

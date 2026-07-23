@@ -81,7 +81,7 @@ export function Register() {
   const navigate = useNavigate()
   const setUser = useAuthStore((s) => s.setUser)
   const [step, setStep] = useState(0)
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState('')
   const [fadeIn, setFadeIn] = useState(true)
   const { specialties, loading: specsLoading, failed: specsFailed } = useSpecialties()
 
@@ -236,7 +236,7 @@ export function Register() {
                   />
                   <Turnstile
                     siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA0000000000000000000'}
-                    onSuccess={setTurnstileToken}
+                    onSuccess={(token: string | null) => setTurnstileToken(token ?? '')}
                   />
                   <div className="flex gap-2">
                     <Button type="button" variant="outline" onClick={() => changeStep(0)} className="flex-1">

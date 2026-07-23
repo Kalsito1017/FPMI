@@ -2,19 +2,21 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 RUN apk add --no-cache python3 make g++
 COPY package*.json ./
-RUN npm ci
 COPY prisma/ ./prisma/
-RUN npx prisma generate
+RUN npm ci && npx prisma generate
 COPY tsconfig*.json nest-cli.json ./
 COPY src/ ./src/
-RUN npm run build
+RUN npm run build && npm prune --production
 
-FROM node:20-alpine
+FROM node:20-alpine AS runtime
 WORKDIR /app
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl wget tini
 COPY package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run prisma:seed && node dist/main"]
+USER node
+ENV NODE_ENV=production
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "dist/main"]
