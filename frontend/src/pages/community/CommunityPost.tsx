@@ -18,7 +18,7 @@ import {
   CardContent,
   CardHeader,
 } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { LogoLoader } from '@/components/LogoLoader'
 import {
   Dialog,
   DialogClose,
@@ -107,9 +107,8 @@ export function CommunityPost() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-8">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="mt-4 h-48 w-full" />
+      <div className="flex min-h-[50vh] items-center justify-center px-4 py-16">
+        <LogoLoader label />
       </div>
     )
   }

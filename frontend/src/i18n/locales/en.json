@@ -12,20 +12,22 @@
     "networkError": "Network error. Please check your connection.",
     "retry": "Retry",
     "pageNotFound": "Page not found",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "previous": "Previous",
+    "next": "Next"
   },
   "nav": {
     "home": "Home",
     "courses": "Courses",
     "announcements": "Announcements",
     "community": "Community",
-    "professors": "Professors",
     "faq": "FAQ",
     "contact": "Contact",
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
-    "admin": "Admin"
+    "admin": "Admin",
+    "search": "Search"
   },
   "home": {
     "title": "FPMI Courses",
@@ -122,7 +124,7 @@
       "guestDesc": "Browse courses and read content",
       "studentDesc": "Contribute to wiki and join discussions",
       "teacherDesc": "Create and manage course content",
-      "studentFeatures": "Post in forums, comment, like, contribute to wiki, review professors"
+      "studentFeatures": "Post in forums, comment, like, and contribute to the wiki"
     }
   },
   "community": {
@@ -186,22 +188,150 @@
     "credits": "Credits",
     "noDescription": "No description.",
     "wikiPages": "Wiki pages",
-    "assignments": "Assignments",
     "resources": "Resources",
     "oldExams": "Past exams",
-    "forum": "Forum",
-    "comingSoon": "Coming soon."
+    "forum": "Community forum",
+    "viewAll": "View all"
+  },
+  "wiki": {
+    "title": "Wiki",
+    "subtitle": "Student-written notes for this course",
+    "newPage": "New page",
+    "loginToCreate": "Login to create a page",
+    "backToCourse": "← Back to course",
+    "backToWiki": "← Back to wiki pages",
+    "backToPage": "← Back to page",
+    "updatedAt": "updated {{date}}",
+    "empty": "No wiki pages yet.",
+    "emptyDesc": "Be the first to write notes for this course!",
+    "notFound": "Wiki page not found",
+    "notFoundDesc": "The page you're looking for doesn't exist or was removed.",
+    "newTitle": "New wiki page",
+    "editTitle": "Edit wiki page",
+    "newDesc": "Write notes for {{course}} using Markdown.",
+    "editDesc": "Update the page content below.",
+    "titleLabel": "Title",
+    "slugLabel": "Slug",
+    "slugPlaceholder": "my-page-slug",
+    "slugHint": "Used in the page URL. Lowercase letters, digits and hyphens.",
+    "contentLabel": "Content (Markdown)",
+    "writeTab": "Write",
+    "previewTab": "Preview",
+    "previewEmpty": "Nothing to preview yet.",
+    "publish": "Publish",
+    "created": "Page created.",
+    "updated": "Page updated.",
+    "deleted": "Page deleted.",
+    "deleteTitle": "Delete wiki page",
+    "deleteConfirm": "Are you sure you want to delete \"{{title}}\"? This action is irreversible.",
+    "errors": {
+      "loadFailed": "Failed to load wiki pages. Please try again.",
+      "createFailed": "Could not create page.",
+      "updateFailed": "Could not update page.",
+      "deleteFailed": "Could not delete page.",
+      "titleRequired": "Title is required.",
+      "titleTooLong": "Title is too long.",
+      "slugFormat": "Use lowercase letters, digits, and hyphens.",
+      "contentRequired": "Content is required.",
+      "contentTooLong": "Content is too long."
+    }
+  },
+  "resources": {
+    "subtitle": "Links, videos and books for this course",
+    "addResource": "Add resource",
+    "loginToAdd": "Login to add a resource",
+    "backToCourse": "← Back to course",
+    "titleCol": "Title",
+    "typeCol": "Type",
+    "addedByCol": "Added by",
+    "empty": "No resources yet.",
+    "emptyDesc": "Share a useful link, video or book for this course.",
+    "newTitle": "Add resource",
+    "editTitle": "Edit resource",
+    "newDesc": "Share a useful link for this course.",
+    "editDesc": "Update the resource details below.",
+    "titleLabel": "Title",
+    "urlLabel": "URL",
+    "urlPlaceholder": "https://example.com",
+    "typeLabel": "Type",
+    "created": "Resource added.",
+    "updated": "Resource updated.",
+    "deleted": "Resource deleted.",
+    "deleteTitle": "Delete resource",
+    "deleteConfirm": "Are you sure you want to delete \"{{title}}\"?",
+    "types": {
+      "LINK": "Link",
+      "VIDEO": "Video",
+      "DOCUMENT": "Document",
+      "BOOK": "Book",
+      "OTHER": "Other"
+    },
+    "errors": {
+      "loadFailed": "Failed to load resources. Please try again.",
+      "createFailed": "Could not add resource.",
+      "updateFailed": "Could not update resource.",
+      "deleteFailed": "Could not delete resource.",
+      "titleRequired": "Title is required.",
+      "titleTooLong": "Title is too long.",
+      "urlInvalid": "Enter a valid URL."
+    }
+  },
+  "exams": {
+    "subtitle": "Previous exam papers for this course",
+    "addExam": "Add exam",
+    "loginToAdd": "Login to add an exam",
+    "backToCourse": "← Back to course",
+    "titleCol": "Title",
+    "yearCol": "Year",
+    "semesterCol": "Semester",
+    "pdfCol": "PDF",
+    "empty": "No exams yet.",
+    "emptyDesc": "Upload a link to a previous exam paper.",
+    "newTitle": "Add exam",
+    "editTitle": "Edit exam",
+    "newDesc": "Share a previous exam paper for this course.",
+    "editDesc": "Update the exam details below.",
+    "titleLabel": "Title",
+    "yearLabel": "Year",
+    "semesterLabel": "Semester (optional)",
+    "semesterNone": "None",
+    "pdfUrlLabel": "PDF URL",
+    "pdfUrlPlaceholder": "https://example.com/exam.pdf",
+    "created": "Exam added.",
+    "updated": "Exam updated.",
+    "deleted": "Exam deleted.",
+    "deleteTitle": "Delete exam",
+    "deleteConfirm": "Are you sure you want to delete \"{{title}}\"?",
+    "errors": {
+      "loadFailed": "Failed to load exams. Please try again.",
+      "createFailed": "Could not add exam.",
+      "updateFailed": "Could not update exam.",
+      "deleteFailed": "Could not delete exam.",
+      "titleRequired": "Title is required.",
+      "titleTooLong": "Title is too long.",
+      "yearRequired": "Year is required.",
+      "yearRange": "Year must be between 1990 and {{max}}.",
+      "pdfUrlInvalid": "Enter a valid URL."
+    }
+  },
+  "search": {
+    "title": "Search",
+    "subtitle": "Search courses, wiki pages, resources and exams",
+    "placeholder": "Type at least 2 characters…",
+    "startTitle": "Start typing to search",
+    "startDesc": "Search across courses, wiki pages, resources and past exams.",
+    "noResults": "No results for \"{{query}}\".",
+    "noResultsDesc": "Try a different search term.",
+    "coursesSection": "Courses",
+    "wikiSection": "Wiki pages",
+    "resourcesSection": "Resources",
+    "examsSection": "Exams"
   },
   "courseCard": {
     "credits": "credits",
     "semester": "Semester",
     "noDescription": "No description.",
     "semesterLabel": "Semester —"
-  },
-  "professors": {
-    "title": "Professors",
-    "loading": "Loading professors…",
-    "noProfessors": "No professors yet."
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -211,7 +341,7 @@
     "categories": {
       "general": "General",
       "content": "Content",
-      "courses": "Courses and professors",
+      "courses": "Courses",
       "forums": "Forums and discussions",
       "support": "Support and reports",
       "dev": "Development"
@@ -223,7 +353,7 @@
       },
       "whoCanUse": {
         "q": "Who can use the platform?",
-        "a": "Anyone can browse content as a guest. Students can register to create and edit wiki pages, post in forums, rate professors, and submit reports or suggestions."
+        "a": "Anyone can browse content as a guest. Students can register to create and edit wiki pages, post in forums, and submit reports or suggestions."
       },
       "howContribute": {
         "q": "How can I contribute content?",
@@ -240,10 +370,6 @@
       "whatCourses": {
         "q": "What courses are available?",
         "a": "The platform covers courses from FPMI specialties, grouped into categories: Programming, Mathematics, Data Analytics, AI, Databases, Networks, and Cybersecurity."
-      },
-      "professorInfo": {
-        "q": "Can I find information about professors?",
-        "a": "Yes, in the \"Professors\" section you'll find profiles with office, email, bio, and the courses they teach. You can also rate and leave a review for a professor."
       },
       "hasForum": {
         "q": "Is there a discussion forum?",
@@ -318,7 +444,6 @@
   "admin": {
     "title": "Admin",
     "courses": "Courses",
-    "professors": "Professors",
     "users": "Users",
     "backToSite": "← Back to site",
     "importExport": "Import/Export",
@@ -363,37 +488,6 @@
         "slugFormat": "Use lowercase letters, digits, and hyphens.",
         "semesterRange": "Semester must be 1–8.",
         "creditsNonNeg": "Credits must be a non-negative number."
-      }
-    },
-    "professorsPage": {
-      "title": "Professor management",
-      "newProfessor": "New professor",
-      "nameCol": "Name",
-      "emailCol": "Email",
-      "officeCol": "Office",
-      "actionsCol": "Actions",
-      "loading": "Loading…",
-      "noProfessors": "No professors yet.",
-      "created": "Professor created.",
-      "createError": "Professor could not be created.",
-      "updated": "Professor updated.",
-      "updateError": "Professor could not be updated.",
-      "deleted": "Professor deleted.",
-      "deleteError": "Professor could not be deleted.",
-      "deleteTitle": "Delete professor",
-      "deleteConfirm": "Are you sure you want to delete \"{{name}}\"? This action is irreversible.",
-      "editTitle": "Edit professor",
-      "newTitle": "New professor",
-      "editDesc": "Update the professor details below.",
-      "newDesc": "Add a new professor.",
-      "nameLabel": "Name",
-      "emailLabel": "Email",
-      "officeLabel": "Office",
-      "bioLabel": "Bio",
-      "photoLabel": "Photo URL",
-      "errors": {
-        "nameRequired": "Name is required.",
-        "validEmail": "Please enter a valid email."
       }
     },
     "usersPage": {
@@ -465,7 +559,6 @@
       "overview": "Overview",
       "totalUsers": "Total users",
       "totalCourses": "Total courses",
-      "totalProfessors": "Total professors",
       "totalAdmins": "Admins",
       "usersByRole": "Users by role",
       "coursesByCategory": "Courses by category",

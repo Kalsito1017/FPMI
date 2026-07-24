@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
 import { CourseCard } from '@/components/CourseCard'
-import { CourseCardGridSkeleton } from '@/components/Skeletons'
+import { LogoLoader } from '@/components/LogoLoader'
+import { PaginationControls } from '@/components/PaginationControls'
 import { Button } from '@/components/ui/button'
 import { COURSE_CATEGORIES, type CourseCategory } from '@/types'
 import { cn } from '@/lib/utils'
@@ -47,7 +48,9 @@ export function Courses() {
       </div>
 
       {isLoading ? (
-        <CourseCardGridSkeleton count={6} />
+        <div className="flex justify-center py-16">
+          <LogoLoader label />
+        </div>
       ) : isError ? (
         <div className="flex flex-col items-start gap-2">
           <p className="text-muted-foreground">{t('common.error')}</p>
@@ -67,38 +70,17 @@ export function Courses() {
             ))}
           </div>
 
-          {data?.meta && data.meta.totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() =>
-                  setSearchParams({
-                    ...(category && { category }),
-                    page: String(page - 1),
-                  })
-                }
-              >
-                &laquo; {t('common.previous', 'Previous')}
-              </Button>
-              <span className="text-sm text-muted-foreground">
-                {page} / {data.meta.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= data.meta.totalPages}
-                onClick={() =>
-                  setSearchParams({
-                    ...(category && { category }),
-                    page: String(page + 1),
-                  })
-                }
-              >
-                {t('common.next', 'Next')} &raquo;
-              </Button>
-            </div>
+          {data?.meta && (
+            <PaginationControls
+              page={page}
+              totalPages={data.meta.totalPages}
+              onPageChange={(next) =>
+                setSearchParams({
+                  ...(category && { category }),
+                  page: String(next),
+                })
+              }
+            />
           )}
         </>
       )}

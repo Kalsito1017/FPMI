@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { useAnnouncements, useCreateAnnouncement, useDeleteAnnouncement, useTriggerScrape } from '@/hooks/use-announcements'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LogoLoader } from '@/components/LogoLoader'
 import {
   Dialog,
   DialogContent,
@@ -238,7 +239,9 @@ export function AdminAnnouncements() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground">{t('admin.announcementsPage.loading')}</p>
+            <div className="flex justify-center py-8">
+              <LogoLoader label />
+            </div>
           ) : !announcements || announcements.length === 0 ? (
             <p className="text-muted-foreground">{t('admin.announcementsPage.empty')}</p>
           ) : (

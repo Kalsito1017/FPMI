@@ -31,15 +31,6 @@ export interface Course {
   category: CourseCategory
 }
 
-export interface Professor {
-  id: number
-  name: string
-  email?: string | null
-  office?: string | null
-  bio?: string | null
-  photo?: string | null
-}
-
 export interface AuthResponse {
   user: User
   token: string
@@ -99,22 +90,6 @@ export type UpdateCourseInput = {
   semester?: number | null
   credits?: number | null
   category?: CourseCategory
-}
-
-export interface CreateProfessorInput {
-  name: string
-  email?: string | null
-  office?: string | null
-  bio?: string | null
-  photo?: string | null
-}
-
-export type UpdateProfessorInput = {
-  name?: string
-  email?: string | null
-  office?: string | null
-  bio?: string | null
-  photo?: string | null
 }
 
 export interface UpdateRoleInput {
@@ -184,4 +159,125 @@ export interface CreateCommentInput {
   content: string
   postId: number
   parentCommentId?: number
+}
+
+export type WikiPageStatus = 'DRAFT' | 'PUBLISHED'
+
+export interface WikiPageListItem {
+  id: number
+  slug: string
+  title: string
+  createdAt: string
+  updatedAt: string
+  createdBy: { id: number; name: string; avatar?: string | null }
+}
+
+export interface WikiPage extends WikiPageListItem {
+  courseId: number
+  content: string
+  status: WikiPageStatus
+  course: { id: number; slug: string; title: string }
+}
+
+export interface CreateWikiPageInput {
+  title: string
+  content: string
+  slug?: string
+}
+
+export interface UpdateWikiPageInput {
+  title?: string
+  content?: string
+}
+
+export type ResourceType = 'LINK' | 'VIDEO' | 'DOCUMENT' | 'BOOK' | 'OTHER'
+
+export const RESOURCE_TYPES: ResourceType[] = [
+  'LINK',
+  'VIDEO',
+  'DOCUMENT',
+  'BOOK',
+  'OTHER',
+]
+
+export interface Resource {
+  id: number
+  courseId: number
+  title: string
+  type: ResourceType
+  url: string
+  createdById: number
+  createdBy: { id: number; name: string; avatar?: string | null }
+  createdAt: string
+}
+
+export interface CreateResourceInput {
+  title: string
+  url: string
+  type?: ResourceType
+}
+
+export interface UpdateResourceInput {
+  title?: string
+  type?: ResourceType
+  url?: string
+}
+
+export interface Exam {
+  id: number
+  courseId: number
+  title: string
+  year: number
+  semester?: number | null
+  pdfUrl: string
+  createdById: number
+  createdBy: { id: number; name: string; avatar?: string | null }
+  createdAt: string
+}
+
+export interface CreateExamInput {
+  title: string
+  year: number
+  pdfUrl: string
+  semester?: number | null
+}
+
+export interface UpdateExamInput {
+  title?: string
+  year?: number
+  semester?: number | null
+  pdfUrl?: string
+}
+
+export interface SearchResponse {
+  query: string
+  results: {
+    courses: {
+      id: number
+      title: string
+      slug: string
+      category: string
+      description?: string | null
+    }[]
+    wikiPages: {
+      id: number
+      title: string
+      slug: string
+      course: { slug: string; title: string }
+    }[]
+    resources: {
+      id: number
+      title: string
+      type: ResourceType
+      url: string
+      course: { slug: string; title: string }
+    }[]
+    exams: {
+      id: number
+      title: string
+      year: number
+      pdfUrl: string
+      course: { slug: string; title: string }
+    }[]
+  }
 }

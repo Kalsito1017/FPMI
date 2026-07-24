@@ -330,39 +330,260 @@ async function main() {
     });
   }
 
-  const professors = [
+  const admin = await prisma.user.findUnique({ where: { email: adminEmail } });
+  if (!admin) {
+    throw new Error('Admin user not found after seeding users');
+  }
+
+  const courseIdBySlug = async (slug: string) => {
+    const course = await prisma.course.findUnique({ where: { slug } });
+    if (!course) {
+      throw new Error(`Course not found for slug: ${slug}`);
+    }
+    return course.id;
+  };
+
+  const wikiPages: {
+    courseSlug: string;
+    slug: string;
+    title: string;
+    content: string;
+  }[] = [
     {
-      name: 'доц. д-р Иван Петров',
-      email: 'i.petrov@fpmi.bg',
-      office: 'каб. 215',
-      bio: 'Преподава програмиране и структури от данни.',
+      courseSlug: 'informatika-1',
+      slug: 'uvod-v-programiraneto',
+      title: 'Увод в програмирането',
+      content: [
+        '# Увод в програмирането',
+        '',
+        'Тази страница обобщава основните понятия от първите лекции по Информатика I.',
+        '',
+        '## Какво е програма?',
+        '',
+        'Програмата е поредица от инструкции, които компютърът изпълнява. Пишем я на език за програмиране (в курса — C++).',
+        '',
+        '## Първа програма',
+        '',
+        '```cpp',
+        '#include <iostream>',
+        '',
+        'int main() {',
+        '    std::cout << "Hello, FPMI!" << std::endl;',
+        '    return 0;',
+        '}',
+        '```',
+        '',
+        '## Основни теми',
+        '',
+        '- Променливи и типове данни',
+        '- Оператори за разклонение (`if`, `switch`)',
+        '- Цикли (`for`, `while`, `do-while`)',
+        '- Функции и обхват на променливите',
+        '',
+        '> **Съвет:** Упражнявайте всяка тема с поне 3 задачи от упражненията.',
+      ].join('\n'),
     },
     {
-      name: 'проф. д-р Мария Георгиева',
-      email: 'm.georgieva@fpmi.bg',
-      office: 'каб. 308',
-      bio: 'Преподава бази данни и анализ на данни.',
+      courseSlug: 'informatika-1',
+      slug: 'strukturi-ot-danni',
+      title: 'Структури от данни',
+      content: [
+        '# Структури от данни',
+        '',
+        'Преглед на основните структури, които се изучават в курса.',
+        '',
+        '## Линейни структури',
+        '',
+        '| Структура | Достъп | Вмъкване | Изтриване |',
+        '|-----------|--------|----------|-----------|',
+        '| Масив     | O(1)   | O(n)     | O(n)      |',
+        '| Свързан списък | O(n) | O(1) | O(1) |',
+        '| Стек      | O(1) (връх) | O(1) | O(1) |',
+        '| Опашка    | O(1) (начало) | O(1) | O(1) |',
+        '',
+        '## Кога какво ползваме?',
+        '',
+        '- **Масив** — когато ни трябва бърз произволен достъп.',
+        '- **Свързан списък** — при чести вмъквания/изтривания в средата.',
+        '- **Стек** — за обратен ред (LIFO), напр. проверка на скоби.',
+        '- **Опашка** — за обработка в реда на постъпване (FIFO).',
+      ].join('\n'),
     },
     {
-      name: 'доц. д-р Димитър Иванов',
-      email: 'd.ivanov@fpmi.bg',
-      office: 'каб. 222',
-      bio: 'Преподава математически анализ и диференциални уравнения.',
+      courseSlug: 'matematicheski-analiz-1',
+      slug: 'granici-i-neprekusnatost',
+      title: 'Граници и непрекъснатост',
+      content: [
+        '# Граници и непрекъснатост',
+        '',
+        'Конспект по темата за граници на функции.',
+        '',
+        '## Дефиниция на граница',
+        '',
+        'Казваме, че функцията $f(x)$ има граница $L$ в точка $a$, ако за всяко $\\varepsilon > 0$ съществува $\\delta > 0$ такова, че:',
+        '',
+        '$$0 < |x - a| < \\delta \\implies |f(x) - L| < \\varepsilon$$',
+        '',
+        '## Важни граници',
+        '',
+        '- $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$',
+        '- $\\lim_{x \\to 0} \\frac{e^x - 1}{x} = 1$',
+        '- $\\lim_{x \\to \\infty} \\left(1 + \\frac{1}{x}\\right)^x = e$',
+        '',
+        '## Непрекъснатост',
+        '',
+        'Функция е непрекъсната в точка $a$, ако $\\lim_{x \\to a} f(x) = f(a)$.',
+      ].join('\n'),
     },
     {
-      name: 'проф. дн Елена Костова',
-      email: 'e.kostova@fpmi.bg',
-      office: 'каб. 308',
-      bio: 'Преподава числени методи и математическо моделиране.',
+      courseSlug: 'obektno-orientirano-programirane',
+      slug: 'principi-na-oop',
+      title: 'Принципи на ООП',
+      content: [
+        '# Принципи на ООП',
+        '',
+        'Четирите основни принципа на обектно-ориентираното програмиране.',
+        '',
+        '## 1. Капсулация',
+        '',
+        'Скриваме вътрешното състояние и излагаме само публичен интерфейс.',
+        '',
+        '```cpp',
+        'class BankAccount {',
+        'private:',
+        '    double balance;',
+        'public:',
+        '    void deposit(double amount) { balance += amount; }',
+        '    double getBalance() const { return balance; }',
+        '};',
+        '```',
+        '',
+        '## 2. Наследяване',
+        '',
+        'Нов клас наследява полета и методи от базов клас.',
+        '',
+        '## 3. Полиморфизъм',
+        '',
+        'Един и същ интерфейс, различно поведение — чрез виртуални функции.',
+        '',
+        '## 4. Абстракция',
+        '',
+        'Моделираме само съществените характеристики на обекта.',
+      ].join('\n'),
     },
   ];
 
-  for (const professor of professors) {
-    const existing = await prisma.professor.findFirst({
-      where: { name: professor.name },
+  for (const page of wikiPages) {
+    const courseId = await courseIdBySlug(page.courseSlug);
+    await prisma.wikiPage.upsert({
+      where: { courseId_slug: { courseId, slug: page.slug } },
+      update: {},
+      create: {
+        courseId,
+        slug: page.slug,
+        title: page.title,
+        content: page.content,
+        createdById: admin.id,
+      },
+    });
+  }
+
+  const resources: {
+    courseSlug: string;
+    title: string;
+    type: 'LINK' | 'VIDEO' | 'DOCUMENT' | 'BOOK' | 'OTHER';
+    url: string;
+  }[] = [
+    {
+      courseSlug: 'informatika-1',
+      title: 'cppreference — справочник по C++',
+      type: 'LINK',
+      url: 'https://en.cppreference.com',
+    },
+    {
+      courseSlug: 'informatika-1',
+      title: 'learncpp.com — безплатен курс по C++',
+      type: 'LINK',
+      url: 'https://www.learncpp.com',
+    },
+    {
+      courseSlug: 'matematicheski-analiz-1',
+      title: 'Khan Academy — Calculus 1',
+      type: 'VIDEO',
+      url: 'https://www.khanacademy.org/math/calculus-1',
+    },
+    {
+      courseSlug: 'obektno-orientirano-programirane',
+      title: 'Design Patterns (GoF) — книга',
+      type: 'BOOK',
+      url: 'https://en.wikipedia.org/wiki/Design_Patterns',
+    },
+  ];
+
+  for (const res of resources) {
+    const courseId = await courseIdBySlug(res.courseSlug);
+    const existing = await prisma.resource.findFirst({
+      where: { courseId, title: res.title },
     });
     if (!existing) {
-      await prisma.professor.create({ data: professor });
+      await prisma.resource.create({
+        data: {
+          courseId,
+          title: res.title,
+          type: res.type,
+          url: res.url,
+          createdById: admin.id,
+        },
+      });
+    }
+  }
+
+  const exams: {
+    courseSlug: string;
+    title: string;
+    year: number;
+    semester?: number;
+    pdfUrl: string;
+  }[] = [
+    {
+      courseSlug: 'informatika-1',
+      title: 'Изпит — януари 2025',
+      year: 2025,
+      semester: 1,
+      pdfUrl: 'https://example.com/exams/informatika-1-2025-01.pdf',
+    },
+    {
+      courseSlug: 'informatika-1',
+      title: 'Изпит — януари 2024',
+      year: 2024,
+      semester: 1,
+      pdfUrl: 'https://example.com/exams/informatika-1-2024-01.pdf',
+    },
+    {
+      courseSlug: 'matematicheski-analiz-1',
+      title: 'Изпит — януари 2025',
+      year: 2025,
+      semester: 1,
+      pdfUrl: 'https://example.com/exams/analiz-1-2025-01.pdf',
+    },
+  ];
+
+  for (const exam of exams) {
+    const courseId = await courseIdBySlug(exam.courseSlug);
+    const existing = await prisma.exam.findFirst({
+      where: { courseId, title: exam.title },
+    });
+    if (!existing) {
+      await prisma.exam.create({
+        data: {
+          courseId,
+          title: exam.title,
+          year: exam.year,
+          semester: exam.semester ?? null,
+          pdfUrl: exam.pdfUrl,
+          createdById: admin.id,
+        },
+      });
     }
   }
 

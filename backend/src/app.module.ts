@@ -10,13 +10,16 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
-import { ProfessorsModule } from './professors/professors.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { CommunityModule } from './community/community.module';
 import { ContactModule } from './contact/contact.module';
 import { EmailModule } from './email/email.module';
 import { HealthModule } from './health/health.module';
+import { WikiModule } from './wiki/wiki.module';
+import { ResourcesModule } from './resources/resources.module';
+import { ExamsModule } from './exams/exams.module';
+import { SearchModule } from './search/search.module';
 import { validationSchema } from './config/env.config';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/roles.guard';
@@ -56,13 +59,16 @@ import { RolesGuard } from './common/roles.guard';
     AuthModule,
     UsersModule,
     CoursesModule,
-    ProfessorsModule,
     AnalyticsModule,
     AnnouncementsModule,
     CommunityModule,
     ContactModule,
     EmailModule,
     HealthModule,
+    WikiModule,
+    ResourcesModule,
+    ExamsModule,
+    SearchModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

@@ -26,6 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { LogoLoader } from '@/components/LogoLoader'
 
 const CHART_COLORS = [
   'var(--chart-1)',
@@ -80,10 +81,12 @@ export function AdminAnalytics() {
       </h1>
 
       {anyLoading ? (
-        <p className="text-muted-foreground">{t('admin.analytics.loading')}</p>
+        <div className="flex justify-center py-16">
+          <LogoLoader label />
+        </div>
       ) : (
         <div className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <StatCard
               label={t('admin.analytics.totalUsers')}
               value={overview.data?.users}
@@ -92,11 +95,6 @@ export function AdminAnalytics() {
             <StatCard
               label={t('admin.analytics.totalCourses')}
               value={overview.data?.courses}
-              loading={overview.isLoading}
-            />
-            <StatCard
-              label={t('admin.analytics.totalProfessors')}
-              value={overview.data?.professors}
               loading={overview.isLoading}
             />
             <StatCard

@@ -25,9 +25,6 @@ export function AdminLayout() {
         <NavLink to="/admin/courses" className={sidebarLinkClass} onClick={() => setMobileOpen(false)}>
           {t('admin.courses')}
         </NavLink>
-        <NavLink to="/admin/professors" className={sidebarLinkClass} onClick={() => setMobileOpen(false)}>
-          {t('admin.professors')}
-        </NavLink>
         <NavLink to="/admin/users" className={sidebarLinkClass} onClick={() => setMobileOpen(false)}>
           {t('admin.users')}
         </NavLink>

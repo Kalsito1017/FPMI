@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { usePosts } from '@/hooks/use-community'
 import { useAuth } from '@/hooks/use-auth'
+import { PaginationControls } from '@/components/PaginationControls'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -11,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { LogoLoader } from '@/components/LogoLoader'
 
 export function Communities() {
   const { t } = useTranslation()
@@ -42,18 +43,8 @@ export function Communities() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-4">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Card key={i}>
-              <CardHeader>
-                <Skeleton className="h-5 w-48" />
-                <Skeleton className="mt-2 h-4 w-32" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-16 w-full" />
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex justify-center py-16">
+          <LogoLoader label />
         </div>
       ) : isError ? (
         <Card>
@@ -114,28 +105,12 @@ export function Communities() {
             ))}
           </div>
 
-          {data?.meta && data.meta.totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setSearchParams({ page: String(page - 1) })}
-              >
-                &laquo; Previous
-              </Button>
-              <span className="text-sm text-muted-foreground">
-                Page {page} of {data.meta.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= data.meta.totalPages}
-                onClick={() => setSearchParams({ page: String(page + 1) })}
-              >
-                Next &raquo;
-              </Button>
-            </div>
+          {data?.meta && (
+            <PaginationControls
+              page={page}
+              totalPages={data.meta.totalPages}
+              onPageChange={(next) => setSearchParams({ page: String(next) })}
+            />
           )}
         </>
       )}

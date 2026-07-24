@@ -43,11 +43,10 @@ You are **fpmi-frontend**, one of three parallel builders for the FPMI Hub proje
 - `client.ts` — Axios instance with `baseURL` from `import.meta.env.VITE_API_URL`. Request interceptor attaches `Authorization: Bearer <token>` from the Zustand store (read token, don't import the store in a way that creates cycles — use a token getter). Response interceptor: on 401, clear auth state and redirect to `/login`.
 - `auth.ts` — `register`, `login`, `me` functions matching the contract.
 - `courses.ts` — `listCourses(category?)`, `getCourse(slug)`, `createCourse`, `updateCourse`, `deleteCourse`.
-- `professors.ts` — `listProfessors`, `getProfessor(id)`, `createProfessor`, `updateProfessor`, `deleteProfessor`.
 - `users.ts` — `listUsers`, `updateUserRole(id, role)`.
 
 ### 3. Types (`src/types/`)
-- Mirror the contract types exactly: `User`, `Role`, `Course`, `CourseCategory` (the 7-variant union), `Professor`, plus request DTOs (`RegisterInput`, `LoginInput`, `CreateCourseInput`, etc.). Export an `ApiError` type if useful.
+- Mirror the contract types exactly: `User`, `Role`, `Course`, `CourseCategory` (the 7-variant union), plus request DTOs (`RegisterInput`, `LoginInput`, `CreateCourseInput`, etc.). Export an `ApiError` type if useful.
 
 ### 4. Store (`src/store/`)
 - `auth-store.ts` — Zustand store: `{ user, token, setUser, setToken, logout, isAuthenticated }`. Persist token + user to localStorage (`zustand/middleware` persist). On `setToken`, update the axios client's default headers (or rely on the interceptor reading from store).
@@ -55,24 +54,21 @@ You are **fpmi-frontend**, one of three parallel builders for the FPMI Hub proje
 ### 5. Hooks (`src/hooks/`)
 - `use-auth.ts` — convenience wrapper around the auth store + TanStack Query `useQuery` for `/auth/me` when a token exists.
 - `use-courses.ts` — `useCourses(category?)`, `useCourse(slug)` using TanStack Query.
-- `use-professors.ts` — `useProfessors`, `useProfessor(id)`.
 
 ### 6. Layouts (`src/layouts/`)
-- `RootLayout.tsx` — navbar (logo "FPMI Hub", links: Home, Courses, Professors; right side: Login/Register when guest, username + logout when authed; Admin link when role ADMIN), `<Outlet/>`, footer (MIT license note + link to GitHub).
-- `AdminLayout.tsx` — sidebar (Courses, Professors, Users), `<Outlet/>`.
+- `RootLayout.tsx` — navbar (logo "FPMI Hub", links: Home, Courses; right side: Login/Register when guest, username + logout when authed; Admin link when role ADMIN), `<Outlet/>`, footer (MIT license note + link to GitHub).
+- `AdminLayout.tsx` — sidebar (Courses, Users), `<Outlet/>`.
 
 ### 7. Routes (`src/routes/`)
-- `AppRoutes.tsx` — React Router config: `/` Home, `/courses` Courses, `/courses/:slug` CoursePage, `/professors` Professors list, `/login`, `/register`, `/admin/*` (AdminLayout with nested: `/admin/courses`, `/admin/professors`, `/admin/users` — all protected, role ADMIN), `*` NotFound. Wrap in `QueryClientProvider` + a `ProtectedRoute` component (redirect to `/login` if not authed, check role for admin).
+- `AppRoutes.tsx` — React Router config: `/` Home, `/courses` Courses, `/courses/:slug` CoursePage, `/login`, `/register`, `/admin/*` (AdminLayout with nested: `/admin/courses`, `/admin/users` — all protected, role ADMIN), `*` NotFound. Wrap in `QueryClientProvider` + a `ProtectedRoute` component (redirect to `/login` if not authed, check role for admin).
 
 ### 8. Pages (`src/pages/`)
 - `Home.tsx` — hero (title + subtitle + CTA to /courses), search input (links to `/courses?q=` is OK but Phase 1 search can be a simple redirect/placeholder), "Popular courses" section (fetch a few courses via `useCourses`), recent announcements placeholder.
 - `Courses.tsx` — fetch `useCourses`, group by `category` (the 7 categories), render a section per category with course cards linking to `/courses/:slug`. Optional category filter (tabs or select).
 - `CoursePage.tsx` — fetch `useCourse(slug)` from route param; show title, category, description, semester, credits. Placeholder sections for "Wiki pages", "Assignments", "Resources", "Previous exams", "Forum" (Phase 1 just renders "Coming soon" placeholders — do NOT build those features). 404 handling if course not found.
-- `Professors.tsx` — list professors (name, office, email); link each to a detail view or expand. Phase 1: list is enough; detail can be a simple card expansion or a `/professors/:id` route if time permits.
 - `Login.tsx` — React Hook Form + Zod (`LoginInput`), calls `login`, on success sets store + redirects to `/`. Show error on 401.
 - `Register.tsx` — React Hook Form + Zod (`RegisterInput`, password min 8), calls `register`, on success sets store + redirects to `/`.
 - `admin/AdminCourses.tsx` — table of courses (title, slug, category, semester, credits) with edit/delete; a "New course" dialog with RHF+Zod form (title, slug, description, semester, credits, category select). Full CRUD via `useMutation` + invalidation.
-- `admin/AdminProfessors.tsx` — table + create/edit dialog (name, email, office, bio, photo). Full CRUD.
 - `admin/AdminUsers.tsx` — table of users (name, email, role) with a role change (select STUDENT/MODERATOR/ADMIN) via PATCH. 
 - `NotFound.tsx` — 404.
 
@@ -105,5 +101,5 @@ Run from `frontend/`:
 - Do NOT create/modify files outside `frontend/`.
 - Do NOT modify `Plan.md`, `docs/api-contract.md`, `.gitignore`, or root files.
 - Do NOT add comments to code.
-- Do NOT build Phase 2/3/4 features (wiki editing, forums, reviews, tickets, exams, resources, search, notifications) — only stub placeholders where a page would show them.
+- Phase 2 features (wiki pages, resources, exams, search, communities forum) are ALREADY BUILT — do not rebuild or stub them. Do NOT build Phase 3/4 features (wiki editing with revisions/approval queue, per-course forums, reviews, tickets, notifications, bookmarks, dashboard, AI, OCR, quizzes).
 - Return a concise summary: structure created, key files, and the result of each self-verification command (pass/fail with command).

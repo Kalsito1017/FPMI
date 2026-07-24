@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, Search, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/hooks/use-auth'
 import { logout as apiLogout } from '@/api/auth'
@@ -43,9 +43,6 @@ export function Navbar() {
       <NavLink to="/community" className={navLinkClass} onClick={() => setMobileOpen(false)}>
         {t('nav.community')}
       </NavLink>
-      <NavLink to="/professors" className={navLinkClass} onClick={() => setMobileOpen(false)}>
-        {t('nav.professors')}
-      </NavLink>
       <NavLink to="/faq" className={navLinkClass} onClick={() => setMobileOpen(false)}>
         {t('nav.faq')}
       </NavLink>
@@ -69,6 +66,11 @@ export function Navbar() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <div className="hidden sm:flex sm:items-center sm:gap-2">
+            <Button asChild variant="ghost" size="icon" aria-label={t('nav.search')}>
+              <Link to="/search">
+                <Search className="h-4 w-4" />
+              </Link>
+            </Button>
             <ThemeToggle />
             <LanguageSwitcher />
           </div>
@@ -124,6 +126,11 @@ export function Navbar() {
         )}
       >
         <div className="flex items-center gap-2 border-b pb-4">
+          <Button asChild variant="ghost" size="icon" aria-label={t('nav.search')}>
+            <Link to="/search" onClick={() => setMobileOpen(false)}>
+              <Search className="h-4 w-4" />
+            </Link>
+          </Button>
           <ThemeToggle />
           <LanguageSwitcher />
         </div>

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useCourses } from '@/hooks/use-courses'
 import { useAnnouncements } from '@/hooks/use-announcements'
 import { CourseCard } from '@/components/CourseCard'
-import { CourseCardGridSkeleton } from '@/components/Skeletons'
+import { LogoLoader } from '@/components/LogoLoader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -60,7 +60,7 @@ export function Home() {
     e.preventDefault()
     if (query.trim()) addRecentSearch(query)
     setFocused(false)
-    navigate('/courses')
+    navigate('/search?q=' + encodeURIComponent(query.trim()))
   }
 
   const handleRecentClick = (term: string) => {
@@ -134,7 +134,9 @@ export function Home() {
         {coursesError ? (
           <p className="text-muted-foreground">{t('common.error')}</p>
         ) : isLoading ? (
-          <CourseCardGridSkeleton count={6} />
+          <div className="flex justify-center py-16">
+            <LogoLoader label />
+          </div>
         ) : popular.length === 0 ? (
           <p className="text-muted-foreground">{t('home.noCourses')}</p>
         ) : (

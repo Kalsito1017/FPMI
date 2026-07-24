@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { ExternalLink, Newspaper, Globe, MessageCircle, Briefcase } from 'lucide-react'
 import { useAnnouncements } from '@/hooks/use-announcements'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { LogoLoader } from '@/components/LogoLoader'
 import type { AnnouncementSource } from '@/types'
 
 const sourceConfig: Record<AnnouncementSource, { icon: typeof Newspaper; label: string; color: string }> = {
@@ -22,10 +22,8 @@ export function Announcements() {
       <p className="mb-8 text-muted-foreground">{t('announcements.subtitle')}</p>
 
       {isLoading ? (
-        <div className="space-y-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-32 w-full rounded-lg" />
-          ))}
+        <div className="flex justify-center py-16">
+          <LogoLoader label />
         </div>
       ) : isError ? (
         <Card>

@@ -6,13 +6,12 @@ export class AnalyticsService {
   constructor(private prisma: PrismaService) {}
 
   async getOverview() {
-    const [users, courses, professors, admins] = await Promise.all([
+    const [users, courses, admins] = await Promise.all([
       this.prisma.user.count(),
       this.prisma.course.count(),
-      this.prisma.professor.count(),
       this.prisma.user.count({ where: { role: 'ADMIN' } }),
     ]);
-    return { users, courses, professors, admins };
+    return { users, courses, admins };
   }
 
   async getUsersByRole() {

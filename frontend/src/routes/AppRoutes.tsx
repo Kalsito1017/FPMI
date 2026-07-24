@@ -5,7 +5,12 @@ import { AdminRoute, ProtectedRoute } from '@/routes/ProtectedRoute'
 import { Home } from '@/pages/Home'
 import { Courses } from '@/pages/Courses'
 import { CoursePage } from '@/pages/CoursePage'
-import { Professors } from '@/pages/Professors'
+import { WikiList } from '@/pages/wiki/WikiList'
+import { WikiPage } from '@/pages/wiki/WikiPage'
+import { WikiForm } from '@/pages/wiki/WikiForm'
+import { Resources } from '@/pages/Resources'
+import { Exams } from '@/pages/Exams'
+import { Search } from '@/pages/Search'
 import { Announcements } from '@/pages/Announcements'
 import { Contact } from '@/pages/Contact'
 import { Communities } from '@/pages/community/Communities'
@@ -20,7 +25,6 @@ import { ForgotPassword } from '@/pages/ForgotPassword'
 import { ResetPassword } from '@/pages/ResetPassword'
 import { Profile } from '@/pages/Profile'
 import { AdminCourses } from '@/pages/admin/AdminCourses'
-import { AdminProfessors } from '@/pages/admin/AdminProfessors'
 import { AdminUsers } from '@/pages/admin/AdminUsers'
 import { AdminImportExport } from '@/pages/admin/AdminImportExport'
 import { AdminAnalytics } from '@/pages/admin/AdminAnalytics'
@@ -36,7 +40,13 @@ export function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:slug" element={<CoursePage />} />
-          <Route path="/professors" element={<Professors />} />
+          <Route path="/courses/:slug/wiki" element={<WikiList />} />
+          <Route path="/courses/:slug/wiki/new" element={<ProtectedRoute><WikiForm /></ProtectedRoute>} />
+          <Route path="/courses/:slug/wiki/:pageSlug" element={<WikiPage />} />
+          <Route path="/courses/:slug/wiki/:pageSlug/edit" element={<ProtectedRoute><WikiForm /></ProtectedRoute>} />
+          <Route path="/courses/:slug/resources" element={<Resources />} />
+          <Route path="/courses/:slug/exams" element={<Exams />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/announcements" element={<Announcements />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/community" element={<Communities />} />
@@ -60,7 +70,6 @@ export function AppRoutes() {
           >
             <Route index element={<Navigate to="/admin/courses" replace />} />
             <Route path="courses" element={<AdminCourses />} />
-            <Route path="professors" element={<AdminProfessors />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="import-export" element={<AdminImportExport />} />
             <Route path="analytics" element={<AdminAnalytics />} />

@@ -3,7 +3,6 @@ import { apiClient } from './client'
 export interface AnalyticsOverview {
   users: number
   courses: number
-  professors: number
   admins: number
 }
 

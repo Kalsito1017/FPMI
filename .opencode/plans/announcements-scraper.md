@@ -57,7 +57,7 @@ Register in `app.module.ts`.
 
 ## 7. Navbar — Add "Announcements" link
 
-- Between Courses and Professors
+- Between Courses and Community
 
 ## 8. Admin — AdminAnnouncements.tsx
 

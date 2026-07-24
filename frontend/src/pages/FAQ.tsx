@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 const faqKeys = [
   { categoryKey: 'general', itemKeys: ['whatIs', 'whoCanUse'] },
   { categoryKey: 'content', itemKeys: ['howContribute', 'howApproval', 'whatIsWiki'] },
-  { categoryKey: 'courses', itemKeys: ['whatCourses', 'professorInfo'] },
+  { categoryKey: 'courses', itemKeys: ['whatCourses'] },
   { categoryKey: 'forums', itemKeys: ['hasForum'] },
   { categoryKey: 'support', itemKeys: ['howReport', 'howReportContent'] },
   { categoryKey: 'dev', itemKeys: ['isOpenSource', 'howContributeDev'] },

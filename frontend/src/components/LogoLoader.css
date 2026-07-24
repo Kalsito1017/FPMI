@@ -1,0 +1,187 @@
+/*
+ * LogoLoader — pure CSS cube-fill animation, 2.4s cycle.
+ *
+ * Timeline (matches the spec):
+ *   0.0s  all cubes dim (25%), top cube starts filling
+ *   0.5s  top full -> bottom-left starts filling
+ *   1.0s  bottom-left full -> bottom-right starts filling
+ *   1.5s  all three full
+ *   2.0s  all cubes glow briefly
+ *   then  fade back to dim and repeat
+ *
+ * Each cube has its own keyframe track, but all tracks share the same
+ * duration and start together (no animation-delay), so the cubes can
+ * never drift out of sync. When a cube fills it briefly scales to 1.05
+ * before settling back. The glow lives on the whole <svg> so all cubes
+ * glow simultaneously.
+ */
+
+.logo-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.logo-loader__label {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.logo-loader__cube {
+  opacity: 0.25;
+  /* Scale each cube around its own center, not the SVG origin. */
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: 2.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-timing-function: linear; /* per-keyframe easings below override this */
+  will-change: opacity, transform;
+}
+
+.logo-loader__cube--top {
+  animation-name: logo-loader-fill-top;
+}
+
+.logo-loader__cube--left {
+  animation-name: logo-loader-fill-left;
+}
+
+.logo-loader__cube--right {
+  animation-name: logo-loader-fill-right;
+}
+
+.logo-loader__svg {
+  filter: brightness(1) drop-shadow(0 0 0 rgba(124, 156, 217, 0));
+  animation: logo-loader-glow 2.4s linear infinite;
+  will-change: filter;
+}
+
+/* Top cube: fills 0.0s–0.36s, pop peak at ~0.19s. */
+@keyframes logo-loader-fill-top {
+  0% {
+    opacity: 0.25;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out fill */
+  }
+  8% {
+    opacity: 1;
+    transform: scale(1.05);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* settle */
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  /* Hold full while the other cubes fill and during the glow. */
+  88% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* smooth reset */
+  }
+  94% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+}
+
+/* Bottom-left cube: fills 0.50s–0.84s, pop peak at ~0.70s. */
+@keyframes logo-loader-fill-left {
+  0%,
+  21% {
+    opacity: 0.25;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  29% {
+    opacity: 1;
+    transform: scale(1.05);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  94% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+}
+
+/* Bottom-right cube: fills 1.01s–1.34s, pop peak at ~1.20s. */
+@keyframes logo-loader-fill-right {
+  0%,
+  42% {
+    opacity: 0.25;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  56% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  94% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+}
+
+/* Brief synchronized glow on the whole logo, peaking at 2.0s (83%). */
+@keyframes logo-loader-glow {
+  0%,
+  76% {
+    filter: brightness(1) drop-shadow(0 0 0 rgba(124, 156, 217, 0));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  83% {
+    filter: brightness(1.2) drop-shadow(0 0 14px rgba(124, 156, 217, 0.55));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  92%,
+  100% {
+    filter: brightness(1) drop-shadow(0 0 0 rgba(124, 156, 217, 0));
+  }
+}
+
+/* Respect users who prefer reduced motion: show the static logo. */
+@media (prefers-reduced-motion: reduce) {
+  .logo-loader__cube {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .logo-loader__svg {
+    animation: none;
+    filter: none;
+  }
+}

@@ -12,7 +12,7 @@ The core idea carried over from the wiki: **course content is a living
 document that students write and improve themselves**, not just a folder of
 files uploaded by admins. What's new versus a plain wiki: real accounts,
 a review/approval step before edits go live, per-course course structure
-(catalog, professors, exams) around the wiki pages, and a modern reading
+(catalog, exams) around the wiki pages, and a modern reading
 experience.
 
 ### Goals
@@ -23,8 +23,6 @@ experience.
 -   Previous exams
 -   Assignments
 -   Resources
--   Professor profiles
--   Reviews
 -   Per-course discussion forums (with per-page "Discuss" threads)
 -   Student dashboards
 -   Search
@@ -154,13 +152,6 @@ PostgreSQL
 -   Side-by-side or inline diff between any two revisions
 -   Rollback to a previous approved revision (moderator/admin)
 
-## Professors
-
--   Profile
--   Office
--   Courses
--   Reviews
-
 ## Communities (Forum)
 
 -   Global community forum for all registered users
@@ -184,7 +175,7 @@ PostgreSQL
 
 -   Form: type (suggestion, feature request, bug report, spam report,
     other), subject, message
--   Inline "Report" action on wiki pages, forum posts, and reviews --
+-   Inline "Report" action on wiki pages and forum posts --
     pre-fills type = spam report with a link to the offending content
 -   Registered users only (signed-in identity, no anonymous submissions)
 -   "My tickets" view showing status of past submissions
@@ -193,10 +184,8 @@ PostgreSQL
 
 -   Users
 -   Courses
--   Professors
 -   Resources
 -   Announcements
--   Reviews
 -   **Pending revisions queue** (approve / reject with diff view)
 -   **Forum moderation** (pin, lock, delete threads/posts)
 -   **Support tickets queue** (filter by type/status, assign, resolve,
@@ -228,7 +217,7 @@ solve versus plain Wikidot.
 # Support Ticket Workflow
 
 1.  A signed-in student submits a ticket from the **Contact / Support**
-    page, or hits **Report** on a specific wiki page / forum post / review
+    page, or hits **Report** on a specific wiki page or forum post
     (which pre-fills `type = spam_report` and `targetType`/`targetId`).
 2.  Backend creates a `SupportTicket` (`status = open`) and sends an email
     via **Resend** to the admin/moderator notification address with the
@@ -264,15 +253,6 @@ solve versus plain Wikidot.
 -   description
 -   semester
 -   credits
-
-## Professor
-
--   id
--   name
--   email
--   office
--   bio
--   photo
 
 ## WikiPage
 
@@ -340,14 +320,6 @@ solve versus plain Wikidot.
 -   difficulty
 -   pdfUrl
 
-## Review
-
--   id
--   rating
--   comment
--   userId
--   professorId
-
 ## CommunityPost
 
 -   id
@@ -391,7 +363,7 @@ solve versus plain Wikidot.
     `spam_report` \| `other`)
 -   subject
 -   message
--   targetType *(nullable -- e.g. `WikiPage`, `ForumPost`, `Review`, set
+-   targetType *(nullable -- e.g. `WikiPage`, `ForumPost`, set
     when reported via an inline "Report" button)*
 -   targetId *(nullable)*
 -   status (`open` \| `in_progress` \| `resolved` \| `closed`)
@@ -444,13 +416,11 @@ backend/
     ├── auth/
     ├── users/
     ├── courses/
-    ├── professors/
     ├── wiki/            # WikiPage + PageRevision, approval workflow
     ├── forum/           # ForumCategory + ForumThread + ForumPost
     ├── support/         # SupportTicket + Resend email notifications
     ├── exams/
     ├── resources/
-    ├── reviews/
     ├── announcements/
     └── prisma/
 ```
@@ -473,7 +443,6 @@ backend/
 -   Post in Communities forum
 -   Like and comment on community posts
 -   Bookmark resources
--   Review professors
 -   Submit support tickets (suggestions, feature requests, bug reports,
     spam reports)
 
@@ -489,13 +458,12 @@ backend/
 -   Roll back pages to a previous revision
 -   Moderate forum threads/posts
 -   Moderate community posts/comments
--   Moderate reviews
 -   Triage & resolve support tickets
 
 ## Administrator
 
 -   Full system access
--   Manage courses, professors, users, roles
+-   Manage courses, users, roles
 -   Manage support-ticket assignment & email notification settings
 
 ------------------------------------------------------------------------
@@ -563,7 +531,6 @@ under an assumption you didn't intend.
 -   Previous exams
 -   Resources
 -   Search
--   Professor profiles
 -   **Communities forum** — posts, likes, nested comments with text and image URLs
 
 ## Phase 3
@@ -571,7 +538,6 @@ under an assumption you didn't intend.
 -   Markdown editor with live preview + page editing
 -   Revision history, diffing, moderator approval queue
 -   Course & per-page discussion forums
--   Reviews
 -   Bookmarks
 -   Notifications (edit approved/rejected, new forum reply, ticket
     resolved)

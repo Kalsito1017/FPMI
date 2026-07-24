@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { LogoLoader } from '@/components/LogoLoader'
 
 export function AdminUsers() {
   const { t } = useTranslation()
@@ -53,8 +54,10 @@ export function AdminUsers() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={3} className="text-muted-foreground">
-                  {t('admin.usersPage.loading')}
+                <TableCell colSpan={3}>
+                  <div className="flex justify-center py-8">
+                    <LogoLoader size={48} label />
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (users ?? []).length === 0 ? (

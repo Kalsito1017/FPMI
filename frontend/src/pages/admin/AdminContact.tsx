@@ -8,6 +8,7 @@ import {
 } from '@/hooks/use-contact'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LogoLoader } from '@/components/LogoLoader'
 import {
   Dialog,
   DialogContent,
@@ -73,7 +74,9 @@ export function AdminContact() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <p className="text-muted-foreground">{t('admin.contactPage.loading')}</p>
+            <div className="flex justify-center py-8">
+              <LogoLoader label />
+            </div>
           ) : !messages || messages.length === 0 ? (
             <p className="text-muted-foreground">{t('admin.contactPage.empty')}</p>
           ) : (

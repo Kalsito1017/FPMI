@@ -3,6 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ContactService } from './contact.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { ContactMessageType } from './dto/create-contact-message.dto';
 
 describe('ContactService', () => {
   let service: ContactService;
@@ -97,7 +98,7 @@ describe('ContactService', () => {
 
       const result = await service.create(
         {
-          type: 'SUGGESTION',
+          type: ContactMessageType.SUGGESTION,
           subject: 'Test Subject',
           message: 'Test message content here',
         },
@@ -119,7 +120,7 @@ describe('ContactService', () => {
       prisma.contactMessage.create.mockResolvedValue(mockContactMessage);
 
       const result = await service.create({
-        type: 'BUG_REPORT',
+        type: ContactMessageType.BUG_REPORT,
         subject: 'Anonymous Bug',
         message: 'Something is broken, please fix it',
       });

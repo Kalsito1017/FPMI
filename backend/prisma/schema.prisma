@@ -31,6 +31,9 @@ model User {
   communityLikes    CommunityLike[]
   contactMessages   ContactMessage[]
   refreshTokens     RefreshToken[]
+  wikiPages         WikiPage[]
+  resources         Resource[]
+  exams             Exam[]
 }
 
 model RefreshToken {
@@ -50,9 +53,9 @@ model CommunityPost {
   content   String
   imageUrl  String?
   authorId  Int
-  author    User              @relation(fields: [authorId], references: [id])
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   comments CommunityComment[]
   likes    CommunityLike[]
@@ -62,17 +65,17 @@ model CommunityPost {
 }
 
 model CommunityComment {
-  id              Int              @id @default(autoincrement())
+  id              Int                @id @default(autoincrement())
   content         String
   postId          Int
-  post            CommunityPost    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post            CommunityPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
   parentCommentId Int?
-  parentComment   CommunityComment? @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  parentComment   CommunityComment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
   replies         CommunityComment[] @relation("CommentReplies")
   authorId        Int
-  author          User             @relation(fields: [authorId], references: [id])
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  author          User               @relation(fields: [authorId], references: [id])
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 
   @@index([postId])
   @@index([authorId])
@@ -80,12 +83,12 @@ model CommunityComment {
 }
 
 model CommunityLike {
-  id        Int      @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   postId    Int
   post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  user      User          @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
 
   @@unique([postId, userId])
   @@index([postId])
@@ -100,15 +103,74 @@ model Course {
   semester    Int?
   credits     Int?
   category    String
+
+  wikiPages WikiPage[]
+  resources Resource[]
+  exams     Exam[]
 }
 
-model Professor {
-  id     Int     @id @default(autoincrement())
-  name   String
-  email  String?
-  office String?
-  bio    String?
-  photo  String?
+enum WikiPageStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model WikiPage {
+  id          Int            @id @default(autoincrement())
+  courseId    Int
+  course      Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  slug        String
+  title       String
+  content     String
+  status      WikiPageStatus @default(PUBLISHED)
+  createdById Int
+  createdBy   User           @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([courseId, slug])
+  @@index([courseId])
+  @@index([status])
+  @@index([createdById])
+}
+
+enum ResourceType {
+  LINK
+  VIDEO
+  DOCUMENT
+  BOOK
+  OTHER
+}
+
+model Resource {
+  id          Int          @id @default(autoincrement())
+  courseId    Int
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  type        ResourceType @default(LINK)
+  url         String
+  createdById Int
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  createdAt   DateTime     @default(now())
+
+  @@index([courseId])
+  @@index([createdById])
+}
+
+model Exam {
+  id          Int      @id @default(autoincrement())
+  courseId    Int
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String
+  year        Int
+  semester    Int?
+  pdfUrl      String
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([courseId])
+  @@index([year])
+  @@index([createdById])
 }
 
 model PasswordResetToken {
@@ -151,14 +213,14 @@ enum ContactMessageStatus {
 }
 
 model ContactMessage {
-  id        Int                @id @default(autoincrement())
+  id        Int                  @id @default(autoincrement())
   type      ContactMessageType
   subject   String
   message   String
   userId    Int?
-  user      User?              @relation(fields: [userId], references: [id])
+  user      User?                @relation(fields: [userId], references: [id])
   status    ContactMessageStatus @default(OPEN)
-  createdAt DateTime           @default(now())
+  createdAt DateTime             @default(now())
 
   @@index([status])
   @@index([userId])

@@ -10,8 +10,10 @@ jest.mock('cheerio', () => ({
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-const axiosGetMock = (axios as Record<string, jest.Mock>)['get'];
-const cheerioLoadMock = (cheerio as Record<string, jest.Mock>)['load'];
+const axiosGetMock = (axios as unknown as Record<string, jest.Mock>)['get'];
+const cheerioLoadMock = (cheerio as unknown as Record<string, jest.Mock>)[
+  'load'
+];
 
 describe('ScraperService', () => {
   let service: ScraperService;

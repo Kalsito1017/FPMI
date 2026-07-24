@@ -12,6 +12,7 @@ import {
   useUpdateCourse,
 } from '@/hooks/use-courses'
 import { COURSE_CATEGORIES, type Course, type CourseCategory } from '@/types'
+import { LogoLoader } from '@/components/LogoLoader'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -182,8 +183,10 @@ export function AdminCourses() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-muted-foreground">
-                  {t('admin.coursesPage.loading')}
+                <TableCell colSpan={6}>
+                  <div className="flex justify-center py-8">
+                    <LogoLoader size={48} label />
+                  </div>
                 </TableCell>
               </TableRow>
             ) : courses.length === 0 ? (

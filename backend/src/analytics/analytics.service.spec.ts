@@ -14,9 +14,6 @@ describe('AnalyticsService', () => {
       count: jest.Mock;
       groupBy: jest.Mock;
     };
-    professor: {
-      count: jest.Mock;
-    };
   };
 
   beforeEach(async () => {
@@ -29,9 +26,6 @@ describe('AnalyticsService', () => {
       course: {
         count: jest.fn(),
         groupBy: jest.fn(),
-      },
-      professor: {
-        count: jest.fn(),
       },
     };
 
@@ -46,17 +40,15 @@ describe('AnalyticsService', () => {
   });
 
   describe('getOverview', () => {
-    it('returns counts for users, courses, professors, and admins', async () => {
+    it('returns counts for users, courses, and admins', async () => {
       prisma.user.count.mockResolvedValueOnce(50).mockResolvedValueOnce(3);
       prisma.course.count.mockResolvedValue(12);
-      prisma.professor.count.mockResolvedValue(5);
 
       const result = await service.getOverview();
 
       expect(result).toEqual({
         users: 50,
         courses: 12,
-        professors: 5,
         admins: 3,
       });
       expect(prisma.user.count).toHaveBeenCalledTimes(2);

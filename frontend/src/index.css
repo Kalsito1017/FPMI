@@ -1,6 +1,13 @@
 @import 'tailwindcss';
+@import 'highlight.js/styles/github.css';
+
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+
+.dark .hljs {
+  background: transparent;
+}
 
 :root {
   --radius: 0.625rem;
